@@ -4,109 +4,145 @@
 
 #FAQ
 
+## 질문
 ## Questions
 
-### Why is this project called "AngularJS"? Why is the namespace called "ng"?
+### 왜 이 프로젝트는 "AngularJS"라고 불리는겁니까? 왜 네임스페이스(namespace)는 "ng"라고 불리나요?
 
-Because HTML has Angular brackets and "ng" sounds like "Angular".
-
-
-### Is AngularJS a library, framework, plugin or a browser extension?
-
-AngularJS fits the definition of a framework the best, even though it's much more lightweight than
-a typical framework and that's why many confuse it with a library.
-
-AngularJS is 100% JavaScript, 100% client side and compatible with both desktop and mobile browsers.
-So it's definitely not a plugin or some other native browser extension.
+HTML는 Angular(모난) 괄호를 가지고 있고, "ng"발음이 "Angular"와 비슷하기 때문입니다.
 
 
-### Is AngularJS a templating system?
+### AngularJS는 라이브러리 인가요? 아니면 프레임웍? 플러그인? 아니면 브라우저 익스텐션(browser extension)인가요?
 
-At the highest level, Angular does look like a just another templating system. But there is one
-important reason why the Angular templating system is different, that makes it very good fit for
-application development: bidirectional data binding. The template is compiled in the browser and
-the compilation step produces a live view. This means you, the developers, don't need to write
-code to constantly sync the view with the model and the model with the view as in other
-templating systems.
+일반적인 프레임웍보다 좀 더 많이 가볍기 때문에, 라이브러리라고 많이들 혼란스러워 하지만, AngularJS는 프레임웍의 정의와 가장 잘 들어맞는다고 하겠습니다.
+
+AngularJS는 100% 자바스크립트이며, 100% 클라이언트 사이드입니다. 또한, 데스크탑과 모바일 브라우저에 모두 호환가능합니다.
+따라서, AngularJS는 명확하게 플러그인 또는 다른 어떤 네이티브(native) 브라우저 익스텐션도 아닙니다.
 
 
-### Do I need to worry about security holes in AngularJS?
+### AngularJS는 템플릿을 만드는 시스템인가요?
 
+최상의 레벨(level)에서는, Angular가 단지 또 다른 하나의 템플릿 시스템으로 보이기도 합니다. 하지만, Angular템플릿 시스템이 다른지에 대한 중요한 이유 한
+가지가 있습니다. 이는 어플리케이션 개발(application development)에 매우 적합하다는 것입니다: : 양방향 데이터 바인딩(bidirectional data binding).
+템플릿은 브라우저에서 컴파일 됩니다. 그리고, 컴파일 과정은 라이브뷰(live view)를 만들어냅니다. 당신에게, 개발자로서 주는 의미는, 당신이 다른 템플릿
+ 시스템에서와 같이 뷰(vioew)와 모델(model), 모델과 뷰를 연속적으로 동일하게 맞추기 위해서 코딩을 할 필요가 없다는 것입니다.
+
+
+### AngularJS에서의 보안취약점(security holes)에 대해서 걱정해야 하나요?
+
+다른 어떤 기술들과 같이, AngularJS는 공격에 대해서 완벽히 방어되지 않습니다. 그러나, Angular는 HTML 인젝션 공격(injection attacks)과 크로스사이트
+스크립트(cross-site scripting)를 포함한 기본적인 보안취약으로부터 방어할 수 있는 내장된 보안 시스템을 제공합니다. AngularJS는 모든 문자열에 대해서
+왕복탈출(round-trip escaping)을 하고, 심지어 서버사이드 통신(communication)을 위해서 XSRF방어를 제공합니다.
 Like any other technology, AngularJS is not impervious to attack. Angular does, however, provide
 built-in protection from basic security holes including cross-site scripting and HTML injection
 attacks. AngularJS does round-trip escaping on all strings for you and even offers XSRF protection
 for server-side communication.
 
+AngularJS는 Content Security Policy(CSP), HTTPS (SSL/TLS) 그리고 서버사이드 입증, 또한 공격가능한 벡터(vectors)를 상당 수 줄여 줄 수 있는
+ 인증과 같은 다른 보안 방법들과 호환이 가능하도록 디자인 되었습니다. 그리고 그 것들의 사용에 대해 강력히 추천하는 바입니다.
 AngularJS was designed to be compatible with other security measures like Content Security Policy
 (CSP), HTTPS (SSL/TLS) and server-side authentication and authorization that greatly reduce the
 possible attack vectors and we highly recommended their use.
 
 
+### 소스, 빌드를 다운 받을 수 있을까요? 그리고 AngularJS 환경을 로컬에서 호스트 할 수 있을까요?
 ### Can I download the source, build, and host the AngularJS environment locally?
 
+네. {@link downloading}에서 지시서를 확인해보십시오.
 Yes. See instructions in {@link downloading}.
 
 
 
+### 어떤 브라우저들이 Angular작업이 가능한가요?
 ### What browsers does Angular work with?
 
+저희는 Safari, Chrome, Firefox, Opera,IE8, IE9 그리고 모바일 브라우져(Android, Chrome Mobile, iOS Safari)와 같은 브라우저를 상대로
+광범위한 적합 테스트(test suite)를 실행했습니다..
 We run our extensive test suite against the following browsers: Safari, Chrome, Firefox, Opera,
 IE8, IE9 and mobile browsers (Android, Chrome Mobile, iOS Safari).
 
 
+### Angular성능은 얼마나 되나요?
 ### What's Angular's performance like?
 
+초기시작(startup)시간은 네트워크 접속상태, 캐쉬(cashe)상태, 사용하는 브라우저, 사용가능한 하드웨어에 따라 상당히 달라집니다. 그러나, 일반적으로
+ 붓스트랩(bootstrap)시간은 십여 밀리세컨(milliseconds) 또는 백여 밀리세컨으로 측정됩니다.
 The startup time heavily depends on your network connection, state of the cache, browser used and
 available hardware, but typically we measure bootstrap time in tens or hundreds of milliseconds.
 
+실시간(runtime) 성능은 백엔드(backend)(백엔드로부터 데이터를 가져와야하는 앱의 경우)의 속도와 마찬가지로, 페이지에 사용한 바인딩(bindings)의 숫자와
+복잡도에 상당히 영향을 받아 다양해 질 것 입니다. 우리는 예증을 위해서, 대체적으로 백여개에서 천여개의 액티브 바인딩(active bindings)를 사용한 짤막한 앱을
+빌드합니다.
 The runtime performance will vary depending on the number and complexity of bindings on the page
 as well as the speed of your backend (for apps that fetch data from the backend). Just for an
 illustration we typically build snappy apps with hundreds or thousands of active bindings.
 
-
+### 추가해야할 angular.js파일이 얼마나 큰가요?
 ### How big is the angular.js file that I need to include?
 
+압축되고, 최소화된 파일 사이즈는 29KB 미만입니다.
 The size of the file is < 29KB compressed and minified.
 
 
+### Angular와 함께 오픈소스 Closuer Library를 사용할 수 있나요?
 ### Can I use the open-source Closure Library with Angular?
 
+네, {@link http://code.google.com/closure/library Closure Library}에서 Angular 위젯(widgets)를 사용하실 수 있습니다.
 Yes, you can use widgets from the {@link http://code.google.com/closure/library Closure Library}
 in Angular.
 
+### Angular가 jQuery라이브러리를 사용하나요?
 ### Does Angular use the jQuery library?
 
+네. 어플리케이션이 붓스트랩할 때 앱 안에 라이브러리가 존재한다면 Angular는 {@link http://jquery.com/ jQuery}를 사용할 수 있습니다.
 Yes, Angular can use {@link http://jquery.com/ jQuery} if it's present in your app when the
 application is being bootstrapped. If jQuery is not present in your script path, Angular falls back
 to its own implementation of the subset of jQuery that we call {@link api/angular.element  jQLite}.
 
 
+### Angular에서의 테스트가능성은 어떤가요?
 ### What is testability like in Angular?
 
+기초단계부터 테스트가능하도록 디자인 되어있고, 매우 테스트 가능합니다. 매우 강력하게 독립적인 모의테스트(서버사이드 통신)를 제공하는 통합독립주입 프레임웍
+(Integrated dependency injection framework)이 존재 합니다. 제세한 사항은 {@link api/ng service}를 참조하십시오.
 Very testable and designed this way from ground up. It has an integrated dependency injection
 framework, provides mocks for many heavy dependencies (server-side communication). See
 {@link api/ng service} for details.
 
 
+### 어떻게하면 Angular에 대해서 조금 더 배울 수 있을까요?
 ### How can I learn more about Angular?
 
+July 17, 2012 talk을 시청하십시오.
+"{@link http://www.youtube.com/watch?v=1CpiB3Wk25U AngularJS Intro + Dependency Injection}".
 Watch the July 17, 2012 talk
 "{@link http://www.youtube.com/watch?v=1CpiB3Wk25U AngularJS Intro + Dependency Injection}".
 
 
+### Angular는 어떤 라이센스입니까?
 ### How is Angular licensed?
 
+MIT 라이센스 입니다.
 The MIT License.
 
+### Angular로고를 다운받고 사용할 수 있습니까?
 ### Can I download and use the Angular logo artwork?
 
+네! "{@link https://github.com/angular/angular.js/tree/master/images/logo angular.js/images/logo}"아래, 저희 github
+ 레포지토리에서 디자인 파일을 찾으실 수 있습니다.
+ 그 로고 디자인은 "{@link http://creativecommons.org/licenses/by-sa/3.0/Creative Commons Attribution-ShareAlike 3.0 Unported License}"
+ 라이센스 아래 제공됩니다. 만약 다른 사용처를 염두하신다면, 저희에게 연락주십시오.
 Yes! You can find design files in our github repository, under "{@link https://github.com/angular/angular.js/tree/master/images/logo 
 angular.js/images/logo}"
 The logo design is licensed under a "{@link http://creativecommons.org/licenses/by-sa/3.0/ 
 Creative Commons Attribution-ShareAlike 3.0 Unported License}". If you have some other use in mind, contact us.
 
+### 어떻게 AngularJS 사은품을 구할 수 있을까요?
 ### How can I get some AngularJS schwag?
 
+저희가 참가하는 행사에는 종종 적은 양의 티셔츠와 스키터를 가지고 갑니다. 당신이 주문을 하고 싶어한다면, 저희 사은품만드는 담당자는 현재 가지고 있는 템플렛을
+ 사용하는 조건으로 당신을 위해 추가 생산작업을 하는 것에 기뻐할 것입니다. 제작자들이 파일로 가지고 있는 디자인을 사용한다면, 셋업 비용을 받지 않으며 당신이
+ 원하는 어떤 수량으로도 주문할 수 있습니다.
 We often bring a few t-shirts and stickers to events where we're presenting. If you want to order your own, the folks who
 make our schwag will be happy to do a custom run for you, based on our existing template. By using the design they have on file,
 they'll waive the setup costs, and you can order any quantity you need.
