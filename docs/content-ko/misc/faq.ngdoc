@@ -204,12 +204,12 @@ There's a good chance that your app isn't the first to require certain functiona
 There are a few pieces of Angular that are particularly likely to be reimplemented out of old habits.
 
 **ng-repeat**
-**ng-repeat**
 
 `ng-repeat`는 이럴 때 좋습니다.
 사람들은 서버에서부터 받아올 때 몇몇의 컨테이너(container)에 더 많은 엘리먼트(element)를 추가하기 위해서 jQuery(위 참조)를 사용하려 합니다.
 아닙니다. 그러지 마세요.
-이것이 `ng-repeat`이 필요한 이유입니다.
+이것을 위해 `ng-repeat`이 있는 것 입니다. 그리고 아주 훌륭히 작동 합니다.
+서버에서 온 데이터를 당신의 `$scope`에 있는 배열(array)에 저장하십시오. 그리고 `ng-repeat`를 이용하여 DOM에 이 데이터들을 결속 시키십시오.
 `ng-repeat` gets this a lot.
 People try to use jQuery (see above) to add more elements to some container as they're fetched from the server.
 No, bad dog.
@@ -218,18 +218,32 @@ Store the data from the server in an array on your `$scope`, and bind it to the 
 
 **ng-show**
 
+`ng-show`도 자주 사용 됩니다.
+다른 앱에서 jQuery를 사용하여 조건에 따라 보여주기도 하고 숨기기도 하는 것은 아주 일반화된 패턴(pattern)입니다. 하지만, Angular는 더 좋은 방법을 가지고
+있습니다.
+`ng-show`(와 `ng-hide`)는 불리안(boolean)는 표현을 기반으로한 조건에 따라 엘리먼트(elements)를 보이기도 숨기기도 합니다.
+`$scope`변수 정의안에 엘리먼트를 보이고, 숨기는 조건들을 기술하십시오:
 `ng-show` gets this frequently too.
 Conditionally showing and hiding things using jQuery is a common pattern in other apps, but Angular has a better way.
 `ng-show` (and `ng-hide`) conditionally show and hide elements based on boolean expressions.
 Describe the conditions for showing and hiding an element in terms of `$scope` variables:
 
+    <div ng-show="!loggedIn">클릭 <a href="#/login">여기</a> 로그인 하기</div>
     <div ng-show="!loggedIn">Click <a href="#/login">here</a> to log in</div>
+
+또한 반대 개념인 `ng-hide`와 이와 비슷한 `ng-disabled`도 함께 알아두십시오.
+특히 몇몇 상호작용하는 `ng-show`전용 패턴을 대신하여 사용할 수 있는 강력한 `ng-switch`가 있다는 것도 알아두십시오.
 
 Note also the counterpart `ng-hide` and similar `ng-disabled`.
 Note especially the powerful `ng-switch` that should be used instead of several mutually exclusive `ng-show`s.
 
 **ng-class**
 
+`ng-class`는 베스트 3개 중 마지막 입니다.
+엘리먼트에 클레스를 적용하는 것은 jQuery를 사용하는 또 다른 일반적인 수동 작업입니다.
+당연히, Angular는 더 좋은 방법을 가지고 있습니다.
+당신은 `ng-class`에 흰 빈칸으로 구분한 클레스 이름을 부여할 수 있고, 이것들은 일반적인 'class'과 동일시 됩니다.
+이건 별로 흥분되진 않습니다. 그래서 두번째 문법이 있습니다:
 `ng-class` is the last of the big three.
 Conditionally applying classes to elements is another thing commonly done manually using jQuery.
 Angular, of course, has a better way.
@@ -238,47 +252,77 @@ That's not very exciting, so there's a second syntax:
 
     <div ng-class="{ errorClass: isError, warningClass: isWarning, okClass: !isError && !isWarning }">...</div>
 
+당신이 `ng-class`에 키(keys)는 CSS 클래스이름이 값(values)으로는 `$scope`를 이용한 조건적 표현으로 구성된 오브젝트(object)를 부여할 경우, 엘리먼트
+는 조건이 모두 '참'인 클래스를 갖게 되고, '거짓'인 조건의 클래스는 갖지 않게 됩니다.
 Where you give `ng-class` an object, whose keys are CSS class names and whose values are conditional expressions using `$scope` variables.
 The element will then have all the classes whose conditions are truthy, and none of those whose conditions are falsy.
 
+또한, 편리한 ng-class-even` 과 `ng-class-odd`, 그리고 비슷하지만 조금 다른 `ng-style`도 있다는 것을 알아 두십시오.
 Note also the handy `ng-class-even` and `ng-class-odd`, and the related though somewhat different `ng-style`.
 
 
+### `$watch` 와 `$apply`
 ### `$watch` and `$apply`
 
+Angular의 양방향 데이터 바인딩(data binding)은 모든 Angular의 훌룡함의 근본이 됩니다.
+그러나, 이건 마법이 아닙니다. 그리고 때로는 올바른 방향으로 갈 수있도록 수동 작업을 해야 할 경우가 있습니다.
 Angular's two-way data binding is the root of all awesome in Angular.
 However, it's not magic, and there are some situations where you need to give it a nudge in the right direction.
 
+당신이 Angular에서 엘리먼트에 값을 `ng-model`, `ng-repeat`그리고 기타 등등을 이용하여 결속시키려 할때, Angular는 그 값에 `$watch`를 만듭니다.
+그러면 스콥(scope)에서 값이 변경 될 때마다 그 엘리먼트를 바라보는 모든 `$watch`는 실행됩니다. 그리고 모두 업데이트 합니다.
 When you bind a value to an element in Angular using `ng-model`, `ng-repeat`, etc., Angular creates a `$watch` on that value.
 Then whenever a value on a scope changes, all `$watch`es observing that element are executed, and everything updates.
 
+가끔은, 주로 사용자 지시자(custom directive)를 작성할 경우, 변화에 따라 사용자 지시자가 반응할 수 있도록 스콥 값의 `$watch`를 정의해줘야만 합니다.
 Sometimes, usually when you're writing a custom directive, you will have to define your own `$watch` on a scope value to make the directive react to changes.
 
+반면, 가끔 당신이 일부 코드(code)에서 스콥값을 변경해도, 앱이 이에 반응하지 않기도 합니다.
+Angular는 당신의 코드 일부가 실행을 마친 이후 스콥 변수의 변화를 확인합니다; 예를 들어, 당신의 스콥에서 `ng-click`이 함수(function)를 호출할 경우,
+Angular는 변경사항을 확인하고, 반응 합니다.
+그러나, 일부 코드는 Angular 영역 밖에 존재하며, 업데이트를 진행시키기 위해서 스스로 `scope.$apply()`를 호출 해야만합니다.
+이런 현상은 사용자 지시자에서의 이벤트 핸들러(event handlers)에서 아주 일반적으로 볼 수 있습니다.
 On the flip side, sometimes you change a scope value in some code but the app doesn't react to it.
 Angular checks for scope variable changes after pieces of your code have finished running; for example, when `ng-click` calls a function on your scope, Angular will check for changes and react.
 However, some code is outside of Angular and you'll have to call `scope.$apply()` yourself to trigger the update.
 This is most commonly seen in event handlers in custom directives.
 
+### `ng-repeat` 와 다른 지시자와 결합시키기
 ### Combining `ng-repeat` with other directives
 
+`ng-repeat`는 아주 유용합니다, Angular에서 가장 강력한 지시자중에 하나 입니다.
+그러나, 변환(transformation)을 DOM에 적용하는 것 또한 충분 합니다.
+그래서 다른 지시자(예를 들어  `ng-show`, `ng-controller`, 그리고 다른 것들)을 `ng-repeat`와 같은 엘리먼트에 적용하 일반적으로 문제를 일으킵니다.
 `ng-repeat` is extremely useful, one of the most powerful directives in Angular.
 However the transformation it applies to the DOM is substantial.
 Therefore applying other directives (such as `ng-show`, `ng-controller` and others) to the same element as `ng-repeat` generally leads to problems.
 
+만약 모든 반복(repeat)에 지시자를 적용하고 싶다면, 부모 엘리먼트안의 반복(repeat)을 감싸서, 지시자 안에 넣으십시오.
+만약 반복(repeat)에 각각의 지시자를 저용하고 싶다면, `ng-repeat`와 함께 자식 엘리먼트속에 넣으십시오.
 If you want to apply a directive to the whole repeat, wrap the repeat in a parent element and put it there.
 If you want to apply a directive to each inner piece of the repeat, put it on a child of the element with `ng-repeat`.
 
+### `$rootScope`가 존지합니다 그러나 사용하면 문제점이 많습니다.
 ### `$rootScope` exists, but it can be used for evil
 
+Angular에서의 스콥(scopes)은 트리의 최상에 있는 루트 스콥(root scope)으로부터 원형적으로(prototypical) 상속받은 구조를 형성합니다.
+거의 모든 뷰(views)는 컨트롤러(controller)를 가지고 있으며, 스콥은 스콥만의 컨트롤러를 가지고 있기 때문에, 대부분 무시될 수 있습니다.
 Scopes in Angular form a hierarchy, prototypically inheriting from a root scope at the top of the tree.
 Usually this can be ignored, since most views have a controller, and therefore a scope, of their own.
 
+아주 간헐적으로 전체 앱에서 글로벌 데이터로 사용하고 싶은 것들이 있습니다.
+그런경우 `$rootScope`에 주입시키고, 다른 스콥처럼 거기에 값을 셋팅하십시오.
+이 스콥들은 루트스콥에서 상속받았기 때문에, 마치 로컬 스콥의 값을 다루듯이 `ng-show`와 같은 지시자에 추가한 표현들이 접근할 수 있게 될 것 입니다.
 Occasionally there are pieces of data that you want to make global to the whole app.
 For these, you can inject `$rootScope` and set values on it like any other scope.
 Since the scopes inherit from the root scope, these values will be available to the expressions attached to directives like `ng-show` just like values on your local `$scope`.
 
+물론, 글로벌 상태는 좋지 않고 사용을 삼가해야 합니다. 다른 언어에서의 글로벌 변수를 사용하지 않는 것 같을 것입니다(그러길 희망합니다).
+특별히, 글로벌 상태를 코드를 위해서 사용하지 마시고, 오로지 데이터를 위해서 사용하십시오.
+만약 $rootScope`에 함수를 넣기를 시도 한다면, 필요한 곳에 주입할 수 있는 서비스에 넣는 것이 거의 항상 더 좋습니다. 그리고 테스트도 쉽습니다.
 Of course, global state sucks and you should use `$rootScope` sparingly, like you would (hopefully) use with global variables in any language.
 In particular, don't use it for code, only data.
 If you're tempted to put a function on `$rootScope`, it's almost always better to put it in a service that can be injected where it's needed, and more easily tested.
 
+반대로 얘기하면, 적은 데이터를 저장하고 반환하는 단일 목적으로 존재하는 서비스를 만들지 마십시오.
 Conversely, don't create a service whose only purpose in life is to store and return bits of data.
