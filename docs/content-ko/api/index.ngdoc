@@ -1,7 +1,6 @@
 @ngdoc overview
-@name API Reference
+@name API 레퍼런스(Reference)
 @description
 
-Use the API Reference documentation when you need more information about a specific feature. Check out
-{@link guide/ Developer Guide} for AngularJS concepts. If you are new to AngularJS we recommend the
-{@link tutorial/ Tutorial}.
+특정 기능에 대한 더 많은 정보가 필요하시면, API 레퍼런스를 사용하십시오. AngularJS 개념을 잡기위해 {@link guide/ Developer Guide}를 확인하십시오.
+AngularJS가 처음이신 분들에게는 {@link tutorial/ Tutorial}를 추천드립니다.
