@@ -2,12 +2,10 @@
 @name 개발자 가이드: Internet Explorer 호환성
 @description
 
-# Overview
 # 개요
 
 이 문서는 사용자정의 속성과 태그를 처리할 때 Internet Explorer(이하 IE)의 고유한 특성에 대해 설명합니다. IE8이나 이하 버전에서 Angular 애플리케이션을 사용할 계획이라면 이 문서를 읽어주시기 바랍니다.
 
-# Short Version
 # 짧은 버전
 
 Angular 어플리케이션을 IE에서 동작하게 하기 위해 다음을 확인해주시기 바랍니다:
