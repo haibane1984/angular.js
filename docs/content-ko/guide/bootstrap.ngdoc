@@ -23,13 +23,13 @@
 </pre>
 
   * `script` 태그를 페이지 하단에 놓는다. 이것은 HTML 로딩이 `angular.js` 스크립트의 로딩에 의해 
-    블럭되지 않기 때문에 애플리케이션 로딩 시간을 향상시킨다. {@link http://code.angularjs.org} 에서
+    블럭되지 않기 때문에 어플리케이션 로딩 시간을 향상시킨다. {@link http://code.angularjs.org} 에서
     최신 버전을 얻을 수 있다. 사이트에 보안 취약점이 노출될 수 있기 때문에 이 URL을 프로덕션 코드에
     링크하지는 마라. 시험적인 개발을 위해 연결하는 것은 괜찮다.
     * 개발이나 디버깅을 하기 위해서는 인간이 읽을 수 있는 파일인 `angular-[version].js` 를 선택해라.
     * 프로덕션에 사용하기 위해서는 압축 및 난독화된 파일인 `angular-[version].min.js` 를 선택해라.
 
-  * Angular가 애플리케이션에 자동으로 부트스트랩되기 원한다면 일반적으로 `<html>` 태그인 애플리케이션의
+  * Angular가 어플리케이션에 자동으로 부트스트랩되기 원한다면 일반적으로 `<html>` 태그인 어플리케이션의
     루트에 `ng-app`을 넣는다.
 
         <html ng-app>
@@ -43,13 +43,13 @@
 
 # 자동 초기화
 
-Angular는 `DOMContentLoad` 이벤트가 발생하면 애플리케이션의 루트에 지정된 {@link api/ng.directive:ngApp `ng-app`} 지시자를
+Angular는 `DOMContentLoad` 이벤트가 발생하면 어플리케이션의 루트에 지정된 {@link api/ng.directive:ngApp `ng-app`} 지시자를
 찾아 그 곳에서 자동으로 초기화한다. Angular가 {@link api/ng.directive:ngApp `ng-app`} 지시자를 찾으면:
 
   * 그 지시자와 관련된 {@link guide/module 모듈}을 로드한다.
-  * 애플리케이션 {@link api/AUTO.$injector 인젝터}를 생성한다.
+  * 어플리케이션 {@link api/AUTO.$injector 인젝터}를 생성한다.
   * 컴파일 대상의 루트인 {@link api/ng.directive:ngApp `ng-app`} 지시자를 포함하는 DOM을 컴파일한다. 이것은 DOM의 일부분만을
-    Angular 애플리케이션으로써 처리할 수도 있다는 것을 말한다.
+    Angular 어플리케이션으로써 처리할 수도 있다는 것을 말한다.
 
 
 
@@ -93,5 +93,5 @@ Angular는 `DOMContentLoad` 이벤트가 발생하면 애플리케이션의 루�
 
   1. 페이지와 모든 코드가 로드된 다음 일반적으로 문서의 루트인 HTML 템플릿의 루트를 찾아라.
 
-  2. 템플릿을 양방향 바인딩 애플리케이션으로 실행 가능하도록 {@link compiler 컴파일} 하기 위해 {@link api/angular.bootstrap} 을
+  2. 템플릿을 양방향 바인딩 어플리케이션으로 실행 가능하도록 {@link compiler 컴파일} 하기 위해 {@link api/angular.bootstrap} 을
   호출해라.
