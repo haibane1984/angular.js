@@ -47,7 +47,7 @@ Angular는 `DOMContentLoad` 이벤트가 발생하면 애플리케이션의 루�
 찾아 그 곳에서 자동으로 초기화한다. Angular가 {@link api/ng.directive:ngApp `ng-app`} 지시자를 찾으면:
 
   * 그 지시자와 관련된 {@link guide/module 모듈}을 로드한다.
-  * {@link api/AUTO.$injector 인젝터} 애플리케이션을 생성한다.
+  * 애플리케이션 {@link api/AUTO.$injector 인젝터}를 생성한다.
   * 컴파일 대상의 루트인 {@link api/ng.directive:ngApp `ng-app`} 지시자를 포함하는 DOM을 컴파일한다. 이것은 DOM의 일부분만을
     Angular 애플리케이션으로써 처리할 수도 있다는 것을 말한다.
 
