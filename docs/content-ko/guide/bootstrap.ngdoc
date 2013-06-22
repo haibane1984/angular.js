@@ -1,17 +1,15 @@
 @ngdoc overview
-@name Developer Guide: Bootstrap
+@name Developer Guide: 부트스트랩(Bootstrap)
 @description
 
-# Overview
+# 개요
 
-This page explains the Angular initialization process and how you can manually initialize Angular
-if necessary.
+이 페이지는 Angular의 초기화 과정을 설명하고, 필요할 경우 수동으로 초기화하는 방법에 대해서 알려준다.
 
 
-# Angular `<script>` Tag
+# Angular `<script>` 태그
 
-This example shows the recommended path for integrating Angular with what we call automatic
-initialization.
+아래 예제는 Angular를 자동으로 초기화하기 위해 권장하고 있는 방법을 보여준다.
 
 
 <pre>
@@ -24,41 +22,35 @@ initialization.
 </html>
 </pre>
 
-  * Place the `script` tag at the bottom of the page. Placing script tags at the end of the page
-    improves app load time because the HTML loading is not blocked by loading of the `angular.js`
-    script. You can get the latest bits from {@link http://code.angularjs.org}. Please don't link
-    your production code to this URL, as it will expose a security hole on your site. For
-    experimental development linking to our site is fine.
-    * Choose: `angular-[version].js` for a human-readable file, suitable for development and
-      debugging.
-    * Choose: `angular-[version].min.js` for a compressed and obfuscated file, suitable for use in
-      production.
-  * Place `ng-app` to the root of your application, typically on the `<html>` tag if you want
-    angular to auto-bootstrap your application.
+  * `script` 태그를 페이지 하단에 놓는다. 이것은 HTML 로딩이 `angular.js` 스크립트의 로딩에 의해 
+    블럭되지 않기 때문에 어플리케이션 로딩 시간을 향상시킨다. {@link http://code.angularjs.org} 에서
+    최신 버전을 얻을 수 있다. 사이트에 보안 취약점이 노출될 수 있기 때문에 이 URL을 프로덕션 코드에
+    링크하지는 마라. 시험적인 개발을 위해 연결하는 것은 괜찮다.
+    * 개발이나 디버깅을 하기 위해서는 인간이 읽을 수 있는 파일인 `angular-[version].js` 를 선택해라.
+    * 프로덕션에 사용하기 위해서는 압축 및 난독화된 파일인 `angular-[version].min.js` 를 선택해라.
+
+  * Angular가 어플리케이션에 자동으로 부트스트랩되기 원한다면 일반적으로 `<html>` 태그인 어플리케이션의
+    루트에 `ng-app`을 넣는다.
 
         <html ng-app>
 
-  * If you choose to use the old style directive syntax `ng:` then include xml-namespace in `html`
-    to make IE happy. (This is here for historical reasons, and we no longer recommend use of
-    `ng:`.)
+  * 만약 예전 스타일의 지시자(Directive) 문법인 `ng:` 를 사용하고자 한다면 IE에서도 문제가 없도록
+    `html`에 xml 네임스페이스를 포함해라. (기존에 사용하던 방식이기 때문에 여기에서 설명할 뿐, 더이상 `ng:` 의 사용을 권장하지 않는다.)
 
         <html xmlns:ng="http://angularjs.org">
 
 
 
-# Automatic Initialization
+# 자동 초기화
 
-Angular initializes automatically upon `DOMContentLoaded` event, at which point Angular looks for
-the {@link api/ng.directive:ngApp `ng-app`} directive which
-designates your application root. If the {@link
-api/ng.directive:ngApp `ng-app`} directive is found then Angular
-will:
+Angular는 `DOMContentLoad` 이벤트가 발생하면 어플리케이션의 루트에 지정된 {@link api/ng.directive:ngApp `ng-app`} 지시자를
+찾아 그 곳에서 자동으로 초기화한다. Angular가 {@link api/ng.directive:ngApp `ng-app`} 지시자를 찾으면:
 
-  * load the {@link guide/module module} associated with the directive.
-  * create the application {@link api/AUTO.$injector injector}
-  * compile the DOM treating the {@link api/ng.directive:ngApp
-    `ng-app`} directive as the root of the compilation. This allows you to tell it to treat only a
-    portion of the DOM as an Angular application.
+  * 그 지시자와 관련된 {@link guide/module 모듈}을 로드한다.
+  * 어플리케이션 {@link api/AUTO.$injector 인젝터}를 생성한다.
+  * 컴파일 대상의 루트인 {@link api/ng.directive:ngApp `ng-app`} 지시자를 포함하는 DOM을 컴파일한다. 이것은 DOM의 일부분만을
+    Angular 어플리케이션으로써 처리할 수도 있다는 것을 말한다.
+
 
 
 <pre>
@@ -73,16 +65,14 @@ will:
 
 
 
-# Manual Initialization
+# 수동 초기화
+
+만약 초기화 과정에서 보다 효율적으로 제어할 필요가 있다면 수동으로 부트스트랩하는 방법을 사용할 수 있다.
+스크립트 로더를 사용하거나 Angular가 페이지를 컴파일하기 전에 수행해야 할 작업이 있는 경우가 그렇다.
 
 
-If you need to have more control over the initialization process, you can use a manual
-bootstrapping method instead. Examples of when you'd need to do this include using script loaders
-or the need to perform an operation before Angular compiles a page.
-
-
-Here is an example of manually initializing Angular. The example is equivalent to using the {@link
-api/ng.directive:ngApp ng-app} directive.
+아래 Angular를 수동으로 초기화하는 예제가 있다. 이것은 {@link api/ng.directive:ngApp ng-app} 지시자를
+사용하는 것과 동일한 예제이다.
 
 <pre>
 <!doctype html>
@@ -99,10 +89,9 @@ api/ng.directive:ngApp ng-app} directive.
 </html>
 </pre>
 
-This is the sequence that your code should follow:
+코드는 다음 순서를 따라야 한다:
 
-  1. After the page and all of the code is loaded, find the root of the HTML template, which is
-  typically the root of the document.
+  1. 페이지와 모든 코드가 로드된 다음 일반적으로 문서의 루트인 HTML 템플릿의 루트를 찾아라.
 
-  2. Call {@link api/angular.bootstrap} to {@link compiler compile} the template into an
-  executable, bi-directionally bound application.
+  2. 템플릿을 양방향 바인딩 어플리케이션으로 실행 가능하도록 {@link compiler 컴파일} 하기 위해 {@link api/angular.bootstrap} 을
+  호출해라.

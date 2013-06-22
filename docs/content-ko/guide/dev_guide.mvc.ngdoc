@@ -1,24 +1,22 @@
 @ngdoc overview
-@name Developer Guide: About MVC in Angular
+@name Developer Guide: Angular의 MVC
 @description
 
-While Model-View-Controller (MVC) has acquired different shades of meaning over the years since it
-first appeared, Angular incorporates the basic principles behind the original {@link
-http://en.wikipedia.org/wiki/Model–view–controller MVC} software design pattern into its way of
-building client-side web applications.
+모델-뷰-컨트롤러(MVC) 는 처음 등장한 이래 수년동안 여러가지 다른 의미로 받아들여졌지만, Angular 는
+클라이언트 측 웹 어플리케이션을 구축하는 방법에 전통적인 {@link http://en.wikipedia.org/wiki/Model–view–controller MVC} 소프트웨어
+설계 패턴 뒤에 숨어 있는 기본 원칙을 포함한다.
 
-The MVC pattern summarized:
+MVC 패턴을 요약하면:
 
-* Separate applications into distinct presentation, data, and logic components
-* Encourage loose coupling between these components
+* 어플리케이션을 서로 다른 프리젠테이션, 데이터, 그리고 논리 컴포넌트로 분리한다.
+* 컴포넌트간에 느슨한 결합을 권장한다.
 
-Along with {@link dev_guide.services services} and {@link di dependency injection}, MVC
-makes angular applications better structured, easier to maintain and more testable.
+MVC는 {@link dev_guide.services 서비스} 및 {@link di 의존성 주입} 과 함께 Angular 어플리케이션을
+더 구조화하고, 유지관리가 쉽게 하고, 그리고 더 검증 가능하도록 해준다.
 
-The following topics explain how angular incorporates the MVC pattern into the angular way of
-developing web applications:
+다음의 토픽들은 Angular가 웹 어플리케이션을 개발하는 방식에 MVC 패턴을 통합하는 방법을 설명한다.
 
-* {@link dev_guide.mvc.understanding_model Understanding the Model Component}
-* {@link dev_guide.mvc.understanding_controller Understanding the Controller Component}
-* {@link dev_guide.mvc.understanding_view Understanding the View Component}
+* {@link dev_guide.mvc.understanding_model 모델 컴포넌트 이해하기}
+* {@link dev_guide.mvc.understanding_controller 컨트롤러 컴포넌트 이해하기}
+* {@link dev_guide.mvc.understanding_view 뷰 컴포넌트 이해하기}
 
