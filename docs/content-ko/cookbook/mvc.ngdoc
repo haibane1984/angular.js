@@ -110,7 +110,7 @@ MVC는 깔끔하고, 행동(behavior, controller)와 뷰(HTML 템플릿)를 테�
 </doc:example>
 
 
-# 알아두셔야 할 사항들
+# 알아두어야 할 사항들
 
 * 컨트롤러는 자바스크립트로 정의 되어있고, 렌더링로직(rendering logic)을 참조하지 않습니다..
 * 컨트롤러는 Angular에 의해 인스턴트화 되었고, 뷰에 주입되었습니다.

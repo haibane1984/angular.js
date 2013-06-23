@@ -134,10 +134,10 @@ Angular는 어떤 특별한 방법으로 당신이 북마크를 다루도록 강
 
 
 
-# 알아두셔야 할 사항들
+# 알아두어야 할 사항들
 
 * 라우트는 `AppCntl`클래스에 정의됩니다. 컨트롤러의 초기화는 적정 URL 라우트와 {@link api/ng.$route $route}서비스를 초기화 시킵니다.
-* {@link api/ng.$route $route}서비스는 URL이 변경될 때마다 적정한 컨트롤러를 인스턴트화하고, 그 URL를 바라보게 됩니다.
-* {@link api/ng.directive:ngView ngView} 위젯(widget)은 URL이 변경될 때마다 뷰를 불러옵니다. 이는 또한 뷰 스콥(view scope)을 새로 인스턴트화된
+* {@link api/ng.$route $route}서비스는 URL이 변경될 때마다 지정한 컨트롤러를 초기화하고, 그 URL를 바라보게 됩니다.
+* {@link api/ng.directive:ngView ngView} 위젯(widget)은 URL이 변경될 때마다 뷰를 불러옵니다. 이는 또한 뷰 스콥(view scope)을 새로 인스턴스화된
 컨트롤러에 적용 시킵니다..
 * URL을 변경하는 것만으로 컨트롤러와 뷰를 변경하기에 충분합니다. 이는 URL을 프로그램적으로 변경하든, 사용자가 변경하든 동인한 작동을 합니다.
