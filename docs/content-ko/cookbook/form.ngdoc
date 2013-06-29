@@ -1,10 +1,9 @@
 @ngdoc overview
-@name Cookbook: Form
+@name Cookbook: 폼양식(Form)
 @description
 
-A web application's main purpose is to present and gather data. For this reason Angular strives
-to make both of these operations trivial. This example shows off how you can build a simple form to
-allow a user to enter data.
+웹 어플리케이션(web application)의 주 목적은 데이터를 제공하고 수집하는데 있습니다. 이런 이유에서 Angular는 데이터를 제공하고 수집하는 두 일들을 신경쓸
+필요가 없게 만들려고 노력하고 있습니다. 이 예제는 사용자가 데이터를 입력하도록 하는 간단한 폼양식을 만들수 있도록 보여줍니다.
 
 
 <doc:example>
@@ -100,15 +99,12 @@ allow a user to enter data.
 </doc:example>
 
 
-# Things to notice
+# 알아두어야 할 사항들
 
-* The user data model is initialized {@link api/ng.directive:ngController controller} and is
-  available in the {@link api/ng.$rootScope.Scope scope} with the initial data.
-* For debugging purposes we have included a debug view of the model to better understand what
-  is going on.
-* The {@link api/ng.directive:input input directives} simply refer
-  to the model and are data-bound.
-* The inputs validate. (Try leaving them blank or entering non digits in the zip field)
-* In your application you can simply read from or write to the model and the form will be updated.
-* By clicking the 'add' link you are adding new items into the `user.contacts` array which are then
-  reflected in the view.
+* 사용자 데이터 모델은 초기화 됩니다 {@link api/ng.directive:ngController 컨트롤러(controller)} 그리고 초기값과 함께 {@link api/ng.$rootScope.Scope 스콥(scope)}
+에서 접근 가능하게 됩니다.
+* 디버그 목적으로 어떻게 진행되고 있는지 좀 더 잘 이해할 수 있도록 모델의 디버그 뷰를 추가하였습니다.
+* {@link api/ng.directive:input input 지시자(directives)}는 단순히 모델을 참조하는 데이터결속체(data-bound) 입니다.
+* 입력값 유효화하기 ( 빈칸으로 남겨두도록 하거나 또는 zip필드(field)에 숫자가 입력되지 않도록 하십시오)
+* 어플리케이션 안에서는 모델을 단순히 읽고 쓸 수 있으며, 폼양식은 (자동으로) 업데이트 될 것입니다.
+* 'add'링크를 클릭하면 user.contacts 배열(array)에 새로운 아이템을 추가하게 되고 뷰에 반영되게 됩니다.

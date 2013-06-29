@@ -1,9 +1,8 @@
 @ngdoc overview
-@name Cookbook: Advanced Form
+@name Cookbook: 향상된 폼(Advanced Form)
 @description
 
-Here we extend the basic form example to include common features such as reverting, dirty state
-detection, and preventing invalid form submission.
+이제 저희는 되돌리기, 변경된 부분 찾기, 잘못된 폼양식 제출과 같은 기본 기능을 포함한 기본 폼 양식 예제를 확장시키려 합니다.
 
 <doc:example>
 <doc:source>
@@ -116,12 +115,9 @@ detection, and preventing invalid form submission.
 </doc:example>
 
 
-#Things to notice
+# 알아두어야 할 사항들
 
-* Cancel & save buttons are only enabled if the form is dirty — there is something to cancel or
-save.
-* Save button is only enabled if there are no validation errors on the form.
-* Cancel reverts the form changes back to original state.
-* Save updates the internal model of the form.
-* Debug view shows the two models. One presented to the user form and the other being the pristine
-copy master.
+* 취소(Cancel)과 저장(save) 버튼은 - 취소나 저장 할게 있을 때 - 양식안에 변경사항이 생길 때만 사용가능 상태가 됩니다.
+* 저장(save) 버튼은 폼에 에러가 없을 경우에만 사용가능 상태가 됩니다.
+* 저장(save)은 폼의 내부 모델(model)을 업데이트합니다.
+* 디버그 뷰(Debug View)는 두가지 모델을 보여쥡니다. 하나는 사용자 폼을, 다른 하나는 본래의 카피마스터(copy mater)를 제공합니다.

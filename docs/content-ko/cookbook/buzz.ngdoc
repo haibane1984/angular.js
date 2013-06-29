@@ -1,13 +1,11 @@
 @ngdoc overview
-@name Cookbook: Resources - Buzz
+@name Cookbook: 리소스(Resources) - Buzz
 @description
 
-External resources are URLs that provide JSON data, which are then rendered with the help of
-templates. Angular has a resource factory that can be used to give names to the URLs and then
-attach behavior to them. For example you can use the
-{@link http://code.google.com/apis/buzz/v1/getting_started.html#background-operations| Google Buzz
-API}
-to retrieve Buzz activity and comments.
+외부 리소스는 템플릿의 도움을 받아 구현되는 JSON데이터를 제공하는 URL들입니다. Angular는 그 URL들에게 이름을 부여하고, 그들에게 행동(behavior)를 추가하여
+사용될 수 있도록 하는 리소스 팩토리(resource factory)을 가지고 있습니다. 예를 들어 당신은 Buzz 활동(activity)과 코멘트(comments)를 검색하는
+{@link http://code.google.com/apis/buzz/v1/getting_started.html#background-operations| Google BuzzAPI}를 사용할 수 있습니다.
+
 
 <doc:example>
  <doc:source>

@@ -2,33 +2,29 @@
 @name Cookbook: Deep Linking
 @description
 
-Deep linking allows you to encode the state of the application in the URL so that it can be
-bookmarked and the application can be restored from the URL to the same state.
+Deep linking URL안에 어플리케이션의 상태를 표현 할 수 있도록 합니다. 그래서 북마크로 쓰일수도 있고, 어플리케이션은 URL로부터 같은 상태를 받아 저장을 할 수
+있습니다.
 
-While Angular does not force you to deal with bookmarks in any particular way, it has services
-which make the common case described here very easy to implement.
+Angular는 어떤 특별한 방법으로 당신이 북마크를 다루도록 강요하지는 않습니다. 다만, 아래와 같이 기술된 것과 같은 일반적인 사례를 아주 쉽게 구현하게 하는
+서비스를 가지고 있습니다.
 
-# Assumptions
+# 가정(Assumptions)
 
-Your application consists of a single HTML page which bootstraps the application. We will refer
-to this page as the chrome.
-Your application is divided into several screens (or views) which the user can visit. For example,
-the home screen, settings screen, details screen, etc. For each of these screens, we would like to
-assign a URL so that it can be bookmarked and later restored. Each of these screens will be
-associated with a controller which define the screen's behavior. The most common case is that the
-screen will be constructed from an HTML snippet, which we will refer to as the partial. Screens can
-have multiple partials, but a single partial is the most common construct. This example makes the
-partial boundary visible using a blue line.
+당신의 어플리케이션은 어플리케이션을 붓스트랩(bootstrap)하는 단일 HTML페이지로 구성되어 있습니다. 당신은 크롬(chrome)으로서 이 페이지를 사용할 것입니다.
+당신의 어플리케이션은 사용자가 방문할 수 있는 여러개의 화면 (또는 뷰)로 나누어집니다. 예를 들어, 홈, 셋팅, 디테일 화면 등등으로 말입니다. 이런 각각의 스크린을
+위해서 북마크 할수도 있고, 나중에 복구를 할 수도 있도록 하기 위해 우리는 URL를 부여하고 싶습니다. 이런 화면의 각각은 화면의 행동(behavior)를 정의해놓은
+컨트롤러로 구성될 것 입니다. 일반적인 경우 우리가 일부를 참조하게 될 작은 HTML일부로 구성될 것입니다. 화면은 여러 조각으로 구성될 수 있으나, 단일구성이 일반적입니다.
+이 예제는 화면구성의 경계를 파란 라인(line)을 사용하여 보일 수 있도록 만듭니다.
 
-You can make a routing table which shows which URL maps to which partial view template and which
-controller.
 
-# Example
+일부는 뷰 템플릿으로, 일부는 컨트롤러(controller)로 가게하는 URL지도를 보여주는 라우팅테이블(routing table)을 만들 수 있습니다.
 
-In this example we have a simple app which consist of two screens:
+# 예제
 
-* Welcome: url `welcome` Show the user contact information.
-* Settings: url `settings` Show an edit screen for user contact information.
+이 예제에서는 두개의 화면으로 구성된 간단한 앱을 구현합니다.
+
+* 환영(welcome): url `welcome`는 사용자 연락처 정보를 보여줍니다.
+* 셋팅(setting): url `settings`는 사용자 연락처 정보를 수정하는 화면을 보여줍니다.
 
 <example module="deepLinking" deps="angular-sanitize.js">
  <file name="script.js">
@@ -138,14 +134,10 @@ In this example we have a simple app which consist of two screens:
 
 
 
-# Things to notice
+# 알아두어야 할 사항들
 
-* Routes are defined in the `AppCntl` class. The initialization of the controller causes the
-  initialization of the {@link api/ng.$route $route} service with the proper URL
-  routes.
-* The  {@link api/ng.$route $route} service then watches the URL and instantiates the
-  appropriate controller when the URL changes.
-* The  {@link api/ng.directive:ngView ngView} widget loads the
-  view when the URL changes. It also sets the view scope to the newly instantiated controller.
-* Changing the URL is sufficient to change the controller and view. It makes no difference whether
-  the URL is changed programatically or by the user.
+* 라우트는 `AppCntl`클래스에 정의됩니다. 컨트롤러의 초기화는 적정 URL 라우트와 {@link api/ng.$route $route}서비스를 초기화 시킵니다.
+* {@link api/ng.$route $route}서비스는 URL이 변경될 때마다 지정한 컨트롤러를 초기화하고, 그 URL를 바라보게 됩니다.
+* {@link api/ng.directive:ngView ngView} 위젯(widget)은 URL이 변경될 때마다 뷰를 불러옵니다. 이는 또한 뷰 스콥(view scope)을 새로 인스턴스화된
+컨트롤러에 적용 시킵니다..
+* URL을 변경하는 것만으로 컨트롤러와 뷰를 변경하기에 충분합니다. 이는 URL을 프로그램적으로 변경하든, 사용자가 변경하든 동인한 작동을 합니다.

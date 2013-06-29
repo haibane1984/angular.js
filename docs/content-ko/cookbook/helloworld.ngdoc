@@ -24,16 +24,13 @@
  </doc:scenario>
 </doc:example>
 
-# Things to notice
+# 알아두어야 할 사항들
 
-Take a look through the source and note:
+소스와 노트를 모두 훑어 보십시오.
 
-* The script tag that {@link guide/bootstrap bootstraps} the Angular environment.
-* The text {@link api/ng.directive:input input form control} which is
-  bound to the greeting name text.
-* There is no need for listener registration and event firing on change events.
-* The implicit presence of the `name` variable which is in the root {@link api/ng.$rootScope.Scope scope}.
-* The double curly brace `{{markup}}`, which binds the name variable to the greeting text.
-* The concept of {@link guide/dev_guide.templates.databinding data binding}, which reflects any
-changes to the
-  input field in the greeting text.
+* Angular환경을 {@link guide/bootstrap 부트스트랩(bootstraps)}하는 스크립트 태그(script tag)
+* 인사문구에 바인딩되는 {@link api/ng.directive:input input 폼약식 컨트롤(form control)} 문자.
+* 리스너를 등록하거나 변경 이벤트들을 발생할 필요가 없습니다.
+* 루트(root){@link api/ng.$rootScope.Scope scope}에 있는 `name`변수의 내부적 존재.
+* 인사문구에 이름변수를 결속시키는 이중 꺾인 괄호 `{{markup}}`.
+* 인사문구의 input 필드(field)에 어떤 변화든 반응하는 {@link guide/dev_guide.templates.databinding 데이터바인딩(data binding)} 개념.
