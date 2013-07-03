@@ -9,7 +9,7 @@ Angular에서 뷰는 Angular가 템플릿, 컨트롤러 그리고 모델의 정�
 
 Angular가 구현한 MVC에서 뷰는 모델과 컨트롤러 모두에 대해 알고 있다. 뷰는 어떤 모델에서 
 양방향 데이터 바인딩이 발생하는지 알고 있으며 {@link api/ng.directive:ngController ngController} 와
-{@link api/ng.directive:ngView ngView} 와 같은 Angular 지시지나 `{{someControllerFunction()}}` 이런 형태의 바인딩을 통해
+{@link api/ng.directive:ngView ngView} 와 같은 Angular 지시자나 `{{someControllerFunction()}}` 이런 형태의 바인딩을 통해
 컨트롤러에 대해 알고 있다. 이런 방법으로 뷰는 연결되어 있는 컨트롤러 함수에서 함수들을 호출할 수 있다.
 
 
