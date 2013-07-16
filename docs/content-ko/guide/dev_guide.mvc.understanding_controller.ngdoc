@@ -1,107 +1,102 @@
 @ngdoc overview
-@name Developer Guide: About MVC in Angular: Understanding the Controller Component
+@name Developer Guide: Angular의 MVC: 컨트롤러 컴포넌트 이해하기
 @description
 
-In Angular, a controller is a JavaScript function(type/class) that is used to augment instances of
-angular {@link scope Scope}, excluding the root scope. When you or Angular create a new
-child scope object via the {@link api/ng.$rootScope.Scope#$new scope.$new} API        , there is an
-option to pass in a controller as a method argument. This will tell Angular to associate the
-controller with the new scope and to augment its behavior.
+Angular에서 컨트롤러는 루프 스코프를 제외한 Angular 스코프의 인스턴스를 확장하기 위해 사용되는 
+자바스크립트 함수(타입/클래스)이다. 직접 또는 Angular가 {@link api/ng.$rootScope.Scope#$new scope.$new} API를 통해
+새로운 하위 스코프 객체를 생성할 때 컨트롤러에 메소드 인자로 전달하는 옵션이 하나 있다. 
+이것은 Angular에게 컨트롤러를 새로운 스코프에 연결하고 그것의 행위(behavior)를 확장하라고 알려준다.
 
-Use controllers to:
+다음과 같은 경우에 컨트롤러를 사용한다:
 
-- Set up the initial state of a scope object.
-- Add behavior to the scope object.
+- 스코프 객체의 초기 상태를 설정하기 위해
+- 스코프 객체에 행위를 추가하기 위해
 
-# Setting up the initial state of a scope object
+# 스코프 객체의 초기 상태 설정
 
-Typically, when you create an application you need to set up an initial state for an Angular scope.
+보통 어플리케이션을 만들때는 Angular 스코프에 대한 초기 상태를 설정해야 한다.
 
-Angular applies (in the sense of JavaScript's `Function#apply`) the controller constructor function
-to a new Angular scope object, which sets up an initial scope state. This means that Angular never
-creates instances of the controller type (by invoking the `new` operator on the controller
-constructor). Constructors are always applied to an existing scope object.
+Angular는 새로운 초기 스코프 상태가 준비된 새로운 Angular 스코프 객체에 컨트롤러 생성자 함수를
+apply(자바스크립트의 `Function#apply`라는 의미) 한다. 이것은 Angular가 (`new` 연산자로 컨트롤러 생성자를 호출함으로써)
+컨트롤러 타입의 인스턴스를 생성하지는 않는다는 의미이다. 생성자는 항상 기존의 스코프 객체에서 apply 된다.
 
-You set up the initial state of a scope by creating model properties. For example:
+모델 프로퍼티를 생성함으로써 스코프의 초기 상태를 설정한다. 예를 들면:
 
+<pre>
 function GreetingCtrl($scope) {
  $scope.greeting = 'Hola!';
 }
+</pre>
 
-The `GreetingCtrl` controller creates a `greeting` model which can be referred to in a template.
+`GreetingCtrl` 컨트롤러는 템플릿에서 참조할 수 있는 `greeting` 모델을 생성한다.
 
-**NOTE**: Many of the examples in the documentation show the creation of functions
-in the global scope. This is only for demonstration purposes - in a real
-application you should use the `.controller` method of your Angular module for
-your application as follows:
+**중요**: 문서상의 많은 예제들을 보면 전역 스코프 상에 함수를 생성하고 있다. 이것은 데모를 보여주기 위함일 뿐이며
+실제 어플리케이션에서는 다음의 예제처럼 어플리케이션에 대한 Angular 모듈의 `.controller` 메소드를
+사용해야 한다.
 
+<pre>
 var myApp = angular.module('myApp',[]);
 
 myApp.controller('GreetingCtrl', ['$scope', function(scope) {
   scope.greeting = 'Hola!';
 }]);
+</pre>
 
-Note also that we use the array notation to explicitly specify the dependency
-of the controller on the `$scope` service provided by Angular.
+또한 Angular가 제공하는 `$scope` 서비스가 컨트롤러에 종속적임을 명시적으로 지정하기 위해
+배열 구문을 사용하는 것을 주목해라.
 
-# Adding Behavior to a Scope Object
+# 스코프 객체에 행위 추가하기
 
-Behavior on an Angular scope object is in the form of scope method properties available to the
-template/view. This behavior interacts with and modifies the application model.
+Angular 스코프 객체의 행위는 템플릿/뷰에서 사용하도록 스코프의 메소드 프로퍼티 형태로 되어 있다. 
+이러한 행위는 어플리케이션의 모델과 상호작용하여 그것을 수정한다.
 
-As discussed in the {@link dev_guide.mvc.understanding_model Model} section of this guide, any
-objects (or primitives) assigned to the scope become model properties. Any functions assigned to
-the scope are available in the template/view, and can be invoked via angular expressions
-and `ng` event handler directives (e.g. {@link api/ng.directive:ngClick ngClick}).
+이 가이드의 {@link dev_guide.mvc.understanding_model 모델} 섹션에서 설명하고 있는 바와 같이
+그 스코프에 할당된 모든 객체(또는 원시데이터)는 모델 프로퍼티가 된다. 그 스코프에 할당된
+모든 함수는 템플릿/뷰에서 사용 가능하고 Angular 표현식과 `ng` 이벤트 핸들러 지시지를 통해
+호출할 수 있다. (예. {@link api/ng.directive:ngClick ngClick})
 
-# Using Controllers Correctly
+# 컨트롤러 올바르게 사용하기
 
-In general, a controller shouldn't try to do too much. It should contain only the business logic
-needed for a single view.
+일반적으로 컨트롤러는 너무 많은 작업을 수행해서는 안된다. 하나의 뷰에 대해 필요한 비지니스 로직만을
+포함해야 한다.
 
-The most common way to keep controllers slim is by encapsulating work that doesn't belong to
-controllers into services and then using these services in controllers via dependency injection.
-This is discussed in the {@link di Dependency Injection} {@link dev_guide.services
-Services} sections of this guide.
+컨트롤러를 가볍게 유지하는 가장 일반적인 방법은 컨트롤러에 속하지 않은 작업을 서비스 안으로 캡슐화하고
+의존성 주입을 통해 컨트롤러에서 이 서비스를 사용하는 것이다. 이것은 이 가이드의 {@link di 의존성 주입} 
+{@link dev_guide.services 서비스} 섹션에서 설명하고 있다.
 
-Do not use controllers for:
+컨트롤러를 사용하지 말아야 할 경우:
 
-- Any kind of DOM manipulation — Controllers should contain only business logic. DOM
-manipulation—the presentation logic of an application—is well known for being hard to test.
-Putting any presentation logic into controllers significantly affects testability of the business
-logic. Angular offers {@link dev_guide.templates.databinding databinding} for automatic DOM manipulation. If
-you have to perform your own manual DOM manipulation, encapsulate the presentation logic in
-{@link guide/directive directives}.
-- Input formatting — Use {@link forms angular form controls} instead.
-- Output filtering — Use {@link dev_guide.templates.filters angular filters} instead.
-- To run stateless or stateful code shared across controllers — Use {@link dev_guide.services angular
-services} instead.
-- To instantiate or manage the life-cycle of other components (for example, to create service
-instances).
+- 모든 종류의 DOM 조작 — 컨트롤러는 비지니스 로직만을 포함해야 한다. DOM 조작—어플리케이션의 프리젠테이션 로직—은
+알다시피 테스트하기가 어렵다. 컨트롤러 안에 프리젠테이션 로직을 넣는 것은 비지니스 로직의 테스트 용이성에
+크게 영향을 끼친다. Angular는 자동으로 DOM을 조작하기 위해 {@link dev_guide.templates.databinding 데이터바인딩}을
+제공한다. 만약 수동으로 DOM 조작을 해야만 한다면 {@link guide/directive 지시자}에 프리젠테이션 로직을 캡슐화해라.
+- 입력 서식 — 대신에 {@link forms Angular 폼 컨트롤}을 사용해라.
+- 출력 필터링 — 대신에 {@link dev_guide.templates.filters Angular 필터}를 사용해라.
+- 컨트롤러 간에 공유하고 있는 상태 코드를 운영하는 것 — 대신에 {@link dev_guide.services Angular 서비스}를 사용해라.
+- 다른 컴포넌트를 인스턴스화하거나 생명주기를 관리하는 것 (예를 들어 서비스 인스턴스를 생성하는 것)
 
 
-# Associating Controllers with Angular Scope Objects
+# 컨트롤러를 Angular 스코프 객체와 연결하기
 
-You can associate controllers with scope objects explicitly via the {@link api/ng.$rootScope.Scope#$new
-scope.$new} api or implicitly via the {@link api/ng.directive:ngController ngController
-directive} or {@link api/ng.$route $route service}.
-
-
-## Controller Constructor and Methods Example
-
-To illustrate how the controller component works in angular, let's create a little app with the
-following components:
-
-- A {@link dev_guide.templates template} with two buttons and a simple message
-- A model consisting of a string named `spice`
-- A controller with two functions that set the value of `spice`
-
-The message in our template contains a binding to the `spice` model, which by default is set to the
-string "very". Depending on which button is clicked, the `spice` model is set to `chili` or
-`jalapeño`, and the message is automatically updated by data-binding.
+컨트롤러를 스코프 객체에 {@link api/ng.$rootScope.Scope#$new scope.$new} api를 통해 명시적으로 연결할 수도 있고
+암시적으로 {@link api/ng.directive:ngController ngController 지시자}나 {@link api/ng.$route $route 서비스}를 통해
+연결할 수도 있다.
 
 
-## A Spicy Controller Example
+## 컨트롤러 생성자와 메소드 예제
+
+Angular에서 컨트롤러 컴포넌트가 어떻게 작동을 하는지 설명하기 위해 다음의 컴포넌트를 사용하여
+작은 앱을 만들어 보자.
+
+- 두개의 버튼과 간단한 메시지가 있는 {@link dev_guide.templates 템플릿}
+- `spice`라는 이름의 문자열을 포함하고 있는 모델
+- `spice`의 값을 설정하는 두개의 함수 컨트롤러
+
+`spice` 모델에 바인딩되는 템플릿 메시지의 기본값을 문자열 "very"로 설정한다. 버튼을 클릭하는 것에 따라
+`spice` 모델은 `chili` 또는 `jalapeño`로 설정되고 메시지는 데이터 바인딩에 의해 자동으로 업데이트된다.
+
+
+## 흥미로운 컨트롤러 예제
 
 <pre>
 <body ng-controller="SpicyCtrl">
@@ -123,29 +118,25 @@ function SpicyCtrl($scope) {
 
 </pre>
 
-Things to notice in the example above:
+위 예제에서 주목할 점은 다음과 같다:
 
-- The `ngController` directive is used to (implicitly) create a scope for our template, and the
-scope is augmented (managed) by the `SpicyCtrl` controller.
-- `SpicyCtrl` is just a plain JavaScript function. As an (optional) naming convention the name
-starts with capital letter and ends with "Ctrl" or "Controller".
-- Assigning a property to `$scope` creates or updates the model.
-- Controller methods can be created through direct assignment to scope (the `chiliSpicy` method)
-- Both controller methods are available in the template (for the `body` element and and its
-children).
-- NB:  Previous versions of Angular (pre 1.0 RC) allowed you to use `this` interchangeably with
-the $scope method, but this is no longer the case.  Inside of methods defined on the scope
-`this` and $scope are interchangeable (angular sets `this` to $scope), but not otherwise
-inside your controller constructor.
-- NB:  Previous versions of Angular (pre 1.0 RC) added prototype methods into the scope
-automatically, but this is no longer the case; all methods need to be added manually to
-the scope.
+- `ngController` 지시자는 해당 템플릿에 대한 스코프를 (암시적으로) 생성하고 그 스코프는
+`SpicyCtrl` 컨트롤러에 의해 확장(관리)된다.
+- `SpicyCtrl`은 평범한 자바스크립트 함수일뿐이다. (선택적인) 명명 규칙에 따라 이름은 대문자로 시작하고
+"Ctrl" 또는 "Controller"로 끝난다.
+- `$scope`에 프로퍼티를 할당하여 모델을 생성하거나 업데이트한다.
+- 컨트롤러 메소드는 스코프에 직접 할당함으로써 생성할 수 있다.(`chiliSpicy` 메소드)
+- 두개의 컨트롤러 메소드 모두 템플릿에서 사용 가능하다.(`body` 요소와 그 하위 요소에서) 
+- 주의: Angular의 이전 버전(1.0 RC 이전)은 $scope 메소드 대신에 `this`를 사용할 수 있다. 하지만 더이상은
+그렇지 않다. 스코프에 정의된 메소드 안에서는 `this`와 $scope를 바꾸어 사용 가능하다(Angular가 $scope를
+`this`로 설정한다.) 하지만 컨트롤러 생성자 안에서는 그렇지 않다.
+- 주의: Angular의 이전 버전(1.0 RC 이전)에서는 자동으로 스코프에 프로토타입 메소드를 추가했다.
+하지만 더이상은 그렇지 않다; 필요한 모든 메소드는 스코프에 수동으로 추가해야만 한다.
 
 
-Controller methods can also take arguments, as demonstrated in the following variation of the
-previous example.
+이전 예제를 수정한 다음의 예제에서 보듯이 컨트롤러 메소드는 인자를 받을수도 있다.
 
-## Controller Method Arguments Example
+## 컨트롤러 메소드의 인자 예제
 
 <pre>
 <body ng-controller="SpicyCtrl">
@@ -163,16 +154,14 @@ function SpicyCtrl($scope) {
 }
 </pre>
 
-Notice that the `SpicyCtrl` controller now defines just one method called `spicy`, which takes one
-argument called `spice`. The template then refers to this controller method and passes in a string
-constant `'chili'` in the binding for the first button and a model property `spice` (bound to an
-input box) in the second button.
+이제 `SpicyCtrl` 컨트롤러가 `spice`라는 하나의 인자를 받는 `spicy` 메소드 하나만을 정의하고 있다는 것을
+주목하자. 템플릿은 이 컨트롤러 메소드를 참조하며 첫번째 버튼에 바인딩되어 있는 문자열 상수
+`'chili'`를 전달하고 두번째 버튼에 (입력 박스에 바인딩된) 모델 프로퍼티인 `spice` 를 전달한다.
 
 
-## Controller Inheritance Example
+## 컨트롤러 상속 예제
 
-Controller inheritance in Angular is based on {@link api/ng.$rootScope.Scope Scope} inheritance. Let's
-have a look at an example:
+Angular에서 컨트롤러의 상속은 {@link api/ng.$rootScope.Scope 스코프}를 기반으로 한다. 예제를 보자:
 
 <pre>
 <body ng-controller="MainCtrl">
@@ -198,30 +187,28 @@ function BabyCtrl($scope) {
 }
 </pre>
 
-Notice how we nested three `ngController` directives in our template. This template construct will
-result in 4 scopes being created for our view:
+템플릿에 세개의 `ngController` 지시자를 중첩시킨 방법을 주목하자. 이러한 템플릿 구조는 아래와 같은
+4개의 스코프를 생성할 것이다.
 
-- The root scope
-- The `MainCtrl` scope, which contains `timeOfDay` and `name` models
-- The `ChildCtrl` scope, which shadows the `name` model from the previous scope and inherits the
-`timeOfDay` model
-- The `BabyCtrl` scope, which shadows both the `timeOfDay` model defined in `MainCtrl` and `name`
-model defined in the ChildCtrl
+- 루트 스코프
+- `timeOfDay` 와 `name` 모델을 포함하고 있는 `MainCtrl` 스코프
+- 이전 스코프의 `name` 모델을 덮어쓰고 `timeOfDay` 모델을 상속하고 있는 `ChildCtrl` 스코프
+- `MainCtrl`에서 정의한 `timeOfDay` 모델과 `ChildCtrl`에서 정의한 `name` 모델 둘 다 덮어쓴
+`BabyCtrl` 스코프
 
-Inheritance works between controllers in the same way as it does with models. So in our previous
-examples, all of the models could be replaced with controller methods that return string values.
+컨트롤러간의 상속은 모델과 같은 방식으로 작동한다. 그래서 이전 예제의 모든 모델을 문자열 값을 반환하는
+컨트롤러 메소드로 교체할 수 있다.
 
-Note: Standard prototypical inheritance between two controllers doesn't work as one might expect,
-because as we mentioned earlier, controllers are not instantiated directly by Angular, but rather
-are applied to the scope object.
+중요: 두 컨트롤러 사이의 표준 프로토타입 상속은 우리가 예상하는대로 되지 않는다. 앞에서 언급한 바와 같이
+컨트롤러는 Angular에 의해 직접 인스턴스화되지 않고 스코프 객체에 apply 되기 때문이다.
 
 
-## Testing Controllers
+## 컨트롤러 테스트하기
 
-Although there are many ways to test a controller, one of the best conventions, shown below,
-involves injecting the `$rootScope` and `$controller`
+컨트롤러를 테스트하는 많은 방법이 있지만 가장 좋은 방법 중 하나는 아래에서 보는 것과 같이
+`$rootScope`와 `$controller`의 주입을 포함시키는 것이다.
 
-Controller Function:
+컨트롤러 함수:
 <pre>
 function myController($scope) {
    $scope.spices = [{"name":"pasilla", "spiciness":"mild"},
@@ -232,7 +219,7 @@ function myController($scope) {
 }
 </pre>
 
-Controller Test:
+컨트롤러 테스트:
 <pre>
 describe('myController function', function() {
 
@@ -256,8 +243,8 @@ describe('myController function', function() {
 </pre>
 
 
-If you need to test a nested controller you need to create the same scope hierarchy
-in your test that exists in the DOM.
+만약 중첩된 컨트롤러를 테스트해야만 한다면 DOM에 존재하는 테스트에서 같은 스코프 계층 구조를
+생성해야 한다.
 
 <pre>
 describe('state', function() {
@@ -284,10 +271,10 @@ describe('state', function() {
 </pre>
 
 
-## Related Topics
+## 관련 토픽
 
-* {@link dev_guide.mvc About MVC in Angular}
-* {@link dev_guide.mvc.understanding_model Understanding the Model Component}
-* {@link dev_guide.mvc.understanding_view Understanding the View Component}
+* {@link dev_guide.mvc Angular의 MVC}
+* {@link dev_guide.mvc.understanding_model 모델 컴포넌트 이해하기}
+* {@link dev_guide.mvc.understanding_view 뷰 컴포넌트 이해하기}
 
 

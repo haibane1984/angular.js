@@ -1,24 +1,20 @@
 @ngdoc overview
-@name Developer Guide: About MVC in Angular: Understanding the Model Component
+@name Developer Guide: Angular의 MVC: 모델 컴포넌트 이해하기
 @description
 
-Depending on the context of the discussion in the Angular documentation, the term _model_ can refer to
-either a single object representing one entity (for example, a model called "phones" with its value
-being an array of phones) or the entire data model for the application (all entities).
+Angular 문서에서 논의된 문맥에 따르면 _모델_ 은 하나의 엔티티(예를 들어, phones라는 배열을 값으로
+가지는 "phones"라고 불리는 모델) 또는 어플리케이션에 대한 전체 데이터 모델(모든 엔티티)을 나타내는
+단일 객체를 참조할 수 있다.
 
-In Angular, a model is any data that is reachable as a property of an angular {@link
-scope Scope} object. The name of the property is the model identifier and the value is
-any JavaScript object (including arrays and primitives).
+Angular에서 모델은 {@link scope 스코프} 객체의 프로퍼티로써 접근 가능한 모든 데이터를 말한다.
+프로퍼티의 이름은 모델의 식별자이고 그 값은 (배열이나 원시데이터를 포함한) 어떤 자바스크립트 객체여도 된다. 
 
-The only requirement for a JavaScript object to be a model in Angular is that the object must be
-referenced by an Angular scope as a property of that scope object. This property reference can be
-created explicitly or implicitly.
+Angular에서 모델이 될 수 있는 자바스크립트 객체에 대한 유일한 요건은 그 객체가 해당 스코프 객체의 프로퍼티로
+Angular 스코프에 의해 참조되어야 한다는 것이다. 이 프로퍼티의 참조는 명시적 또는 암시적으로 생성할 수 있다.
 
-You can create models by explicitly creating scope properties referencing JavaScript objects in the
-following ways:
+다음과 같은 방법으로 자바스크립트 객체를 참조하는 스코프 프로퍼티를 명시적으로 생성하여 모델을 만들 수 있다:
 
-* Make a direct property assignment to the scope object in JavaScript code; this most commonly
-occurs in controllers:
+* 자바스크립트 코드에서 스코프 객체에 프로퍼티를 직접 할당한다; 이것은 거의 대부분 컨트롤러에서 이루어진다:
 
          function MyCtrl($scope) {
              // create property 'foo' on the MyCtrl's scope
@@ -26,46 +22,45 @@ occurs in controllers:
              $scope.foo = 'bar';
          }
 
-* Use an {@link expression angular expression} with an assignment operator in templates:
+* 템플릿에 할당 연산자로 {@link expression Angular 표현식} 을 사용한다:
 
          <button ng-click="{{foos='ball'}}">Click me</button>
 
-* Use {@link api/ng.directive:ngInit ngInit directive} in templates (for toy/example apps
-only, not recommended for real applications):
+* 템플릿에 {@link api/ng.directive:ngInit ngInit 지시자} 를 사용한다. (개인/예제 앱에서는 상관 없지만,
+실제 어플리케이션에서는 권장하지 않는다):
 
          <body ng-init=" foo = 'bar' ">
 
-Angular creates models implicitly (by creating a scope property and assigning it a suitable value)
-when processing the following template constructs:
+Angular는 아래의 템플릿 구문을 처리할 때 (스코프 프로퍼티를 생성하고 적절한 값을 할당함으로써)
+암시적으로 모델을 생성한다:
 
-* Form input, select, textarea and other form elements:
+* input, select, textarea 그리고 다른 폼 요소들:
 
          <input ng-model="query" value="fluffy cloud">
 
-   The code above creates a model called "query" on the current scope with the value set to "fluffy
-cloud".
+   위 코드는 현재 스코프에 "query"라는 모델을 생성하고 "fluffy cloud"라는 값을 설정한다.
 
-* An iterator declaration in {@link api/ng.directive:ngRepeat ngRepeater}:
+* {@link api/ng.directive:ngRepeat ngRepeater} 의 반복자 선언:
 
          <p ng-repeat="phone in phones"></p>
 
-   The code above creates one child scope for each item in the "phones" array and creates a "phone"
-object (model) on each of these scopes with its value set to the value of "phone" in the array.
+   위 코드는 "phones"라는 배열의 각 항목별로 하위 스코프를 생성하고 이 각각의 스코프에 "phone" 객체(모델)를
+생성한 후 그 값을 배열의 "phone"의 값으로 설정한다.
 
-In Angular, a JavaScript object stops being a model when:
+Angular에서는 다음과 같은 경우에 모델 생성에 실패한다:
 
-* No Angular scope contains a property that references the object.
+* 그 객체를 참조하는 프로퍼티를 포함하는 Angular 스코프가 없는 경우.
 
-* All Angular scopes that contain a property referencing the object become stale and eligible for
-garbage collection.
+* 그 객체를 참조하는 프로퍼티를 포함한 모든 Angular 스코프가 부실하여 가비지 컬렉션(garbage collection)의
+대상이 되는 경우.
 
-The following illustration shows a simple data model created implicitly from a simple template:
+아래 그림은 간단한 템플릿으로부터 암시적으로 생성된 간단한 데이터 모델을 보여준다:
 
 <img src="img/guide/about_model_final.png">
 
 
-## Related Topics
+## 관련 토픽
 
-* {@link dev_guide.mvc About MVC in Angular}
-* {@link dev_guide.mvc.understanding_controller Understanding the Controller Component}
-* {@link dev_guide.mvc.understanding_view Understanding the View Component}
+* {@link dev_guide.mvc Angular의 MVC}
+* {@link dev_guide.mvc.understanding_controller 컨트롤러 컴포넌트 이해하기}
+* {@link dev_guide.mvc.understanding_view 뷰 컴포넌트 이해하기}

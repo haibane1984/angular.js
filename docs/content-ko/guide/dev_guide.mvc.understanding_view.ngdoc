@@ -1,22 +1,20 @@
 @ngdoc overview
-@name Developer Guide: About MVC in Angular: Understanding the View Component
+@name Developer Guide: Angular의 MVC: 뷰 컴포넌트 이해하기
 @description
 
-In Angular, the view is the DOM loaded and rendered in the browser, after Angular has transformed
-the DOM based on information in the template, controller and model.
+Angular에서 뷰는 Angular가 템플릿, 컨트롤러 그리고 모델의 정보를 기반으로 DOM을 변환한 후
+브라우저에서 그 DOM을 로드하여 렌더링한 것이다.
 
 <img src="img/guide/about_view_final.png">
 
-In the Angular implementation of MVC, the view has knowledge of both the model and the controller.
-The view knows about the model where two-way data-binding occurs. The view has knowledge of the
-controller through Angular directives, such as {@link api/ng.directive:ngController
-ngController} and {@link api/ng.directive:ngView ngView}, and through bindings of this form:
-`{{someControllerFunction()}}`. In these ways, the view can call functions in an associated
-controller function.
+Angular가 구현한 MVC에서 뷰는 모델과 컨트롤러 모두에 대해 알고 있다. 뷰는 어떤 모델에서 
+양방향 데이터 바인딩이 발생하는지 알고 있으며 {@link api/ng.directive:ngController ngController} 와
+{@link api/ng.directive:ngView ngView} 와 같은 Angular 지시자나 `{{someControllerFunction()}}` 이런 형태의 바인딩을 통해
+컨트롤러에 대해 알고 있다. 이런 방법으로 뷰는 연결되어 있는 컨트롤러 함수에서 함수들을 호출할 수 있다.
 
 
-## Related Topics
+## 관련 토픽
 
-* {@link dev_guide.mvc About MVC in Angular}
-* {@link dev_guide.mvc.understanding_model Understanding the Model Component}
-* {@link dev_guide.mvc.understanding_controller Understanding the Controller Component}
+* {@link dev_guide.mvc About Angular의 MVC}
+* {@link dev_guide.mvc.understanding_model 모델 컴포넌트 이해하기}
+* {@link dev_guide.mvc.understanding_controller 컨트롤러 컴포넌트 이해하기}
