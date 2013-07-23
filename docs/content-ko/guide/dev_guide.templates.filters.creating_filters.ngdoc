@@ -1,14 +1,12 @@
 @ngdoc overview
-@name Developer Guide: Templates: Filters: Creating Angular Filters
+@name Developer Guide: 템플릿: 필터: Angular에서 필터 생성하기
 @description
 
-Writing your own filter is very easy: just register a new filter (injectable) factory function with
-your module. This factory function should return a new filter function which takes the input value
-as the first argument. Any filter arguments are passed in as additional arguments to the filter
-function.
+자신만의 필터를 만드는 것은 매우 쉽다: 모듈에 (주입 가능한) 팩토리 함수로 새로운 필터를 등록하기만
+하면 된다. 이 팩토리 함수는 첫번째 인자로 입력값을 받는 새로운 필터 함수를 반환해야만 한다. 필터의
+모든 인자는 필터 함수에 인자를 추가하여 전달된다.
 
-The following sample filter reverses a text string. In addition, it conditionally makes the
-text upper-case and assigns color.
+다음 예제의 필터는 문자열의 순서를 뒤집는다. 또한, 조건부로 문자열을 대문자로 변환한다.
 
 <doc:example module="MyReverseModule">
 <doc:source>
@@ -50,11 +48,11 @@ text upper-case and assigns color.
 </doc:example>
 
 
-## Related Topics
+## 관련 토픽
 
-* {@link dev_guide.templates.filters Understanding Angular Filters}
-* {@link compiler Angular HTML Compiler}
+* {@link dev_guide.templates.filters Angular의 필터 이해하기}
+* {@link compiler Angular의 HTML 컴파일러}
 
-## Related API
+## 관련 API
 
-* {@link api/ng.$filter Angular Filter API}
+* {@link api/ng.$filter Angular의 필터 API}

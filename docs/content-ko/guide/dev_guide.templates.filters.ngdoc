@@ -1,23 +1,22 @@
 @ngdoc overview
-@name Developer Guide: Templates: Understanding Angular Filters
+@name Developer Guide: 템플릿: Angular의 필터 이해하기
 @description
 
-Angular filters format data for display to the user.
+Angular의 필터는 데이터를 포맷팅(서식화)해서 사용자에게 보여준다.
 
-For example, you might have a data object that needs to be formatted according to the locale before
-displaying it to the user. You can pass expressions through a chain of filters like this:
+예를 들면 사용자에게 데이터를 보여주기 전에 지역에 따라 포맷팅을 해야만 하는 경우가 있을 수도 있다.
+아래의 예처럼 필터 체인을 통해 표현식을 전달할 수 있다.
 
         name | uppercase
 
-The expression evaluator simply passes the value of name to
-{@link api/ng.filter:uppercase uppercase filter}.
+위 표현식은 간단하게 name의 값을 {@link api/ng.filter:uppercase uppercase 필터}에게 전달한다.
 
 
-## Related Topics
+## 관련 토픽
 
-* {@link dev_guide.templates.filters.using_filters Using Angular Filters}
-* {@link dev_guide.templates.filters.creating_filters Creating Angular Filters}
+* {@link dev_guide.templates.filters.using_filters Angular에서 필터 사용하기}
+* {@link dev_guide.templates.filters.creating_filters Angular에서 필터 생성하기}
 
-## Related API
+## 관련 API
 
-* {@link api/ng.$filter Angular Filter API}
+* {@link api/ng.$filter Angular의 필터 API}
