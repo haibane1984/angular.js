@@ -11,9 +11,9 @@ Angular는 아래의 CSS 클래스만을 설정한다. 유용한 스타일을 �
     이 클래스를 적용한다. ({@link api/ng.directive:input input} 지시자(directive)를 살펴보자)
 
 * `ng-pristine`, `ng-dirty`
-  - **사용법:** Angular의 {@link api/ng.directive:input input} 지시자는 사용자와 상호작용이 없는
-    새로운 input 위젯 요소에 `ng-pristine` 클래스를 적용한다. 해당 input 위젯 요소에 사용자와의
-    상호작용이 발생하게 되면 `ng-dirty` 클래스로 변경된다.
+  - **사용법:** Angular의 {@link api/ng.directive:input input} 지시자는 사용자가 입력한 적이 없는
+    새로운 input 위젯 요소에 `ng-pristine` 클래스를 적용한다. 해당 input 위젯 요소에 사용자가
+    한번 입력을 하고 나면 `ng-dirty` 클래스로 변경된다.
 
 
 ## 관련 토픽
