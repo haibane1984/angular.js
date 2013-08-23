@@ -1,38 +1,39 @@
 @ngdoc overview
-@name Developer Guide: Templates: Data Binding in Angular
+@name Developer Guide: 템플릿: Angular의 데이터 바인딩
 @description
 
-Data-binding in Angular web apps is the automatic syncronization of data between the model and view
-components.  The way that Angular implements data-binding lets you treat the model as the
-single-source-of-truth in your application.  The view is a projection of the model at all times.
-When the model changes, the view reflects the change, and vice versa.
+Angular 웹 어플리케이션의 데이터 바인딩은 모델과 뷰 컴포넌트간에 자동으로 데이터 동기화가 이루어지게 한다.
+Angular가 데이터 바인딩을 구현한 방법은 어플리케이션에서 모델을 "단일정보의 가치(single-source-of-truth)"라는
+관점으로 다룰 수 있게 한다. 뷰는 항상 모델을 투영한다. 모델이 변경되면 뷰가 그 변경사항을 반영하며,
+그 반대도 마찬가지다. 
 
-## Data Binding in Classical Template Systems
+## 전형적인 템플릿 시스템의 데이터 바인딩
 
 <img class="right" src="img/One_Way_Data_Binding.png"/>
-Most templating systems bind data in only one direction: they merge template and model components
-together into a view, as illustrated in the diagram. After the merge occurs, changes to the model
-or related sections of the view are NOT automatically reflected in the view. Worse, any changes
-that the user makes to the view are not reflected in the model. This means that the developer has
-to write code that constantly syncs the view with the model and the model with the view.
 
-## Data Binding in Angular Templates
+대부분의 템플릿 시스템은 데이터가 단방향으로만 바인딩된다: 그림에서 보는 바와 같이 템플릿과 
+모델 컴포넌트가 하나의 뷰로 병합된다. 병합된 후에는 모델이 변경되거나 뷰에서 모델과 관련된 부분이 변경되어도
+뷰에 자동으로 반영되지는 않는다. 더군다나 사용자가 뷰에 대해 수행한 모든 변경사항이 모델에 반영되지는 않는다.
+이것은 개발자가 뷰와 모델간에 그리고 모델과 뷰간에 지속적으로 동기화시키는 코드를 작성해야만 한다는 것을
+의미한다.
+
+## Angular 템플릿의 데이터 바인딩
 
 <img class="right" src="img/Two_Way_Data_Binding.png"/>
-The way Angular templates works is different, as illustrated in the diagram. They are different
-because first the template (which is the uncompiled HTML along with any additional markup or
-directives) is compiled on the browser, and second, the compilation step produces a live view. We
-say live because any changes to the view are immediately reflected in the model, and any changes in
-the model are propagated to the view. This makes the model always the single-source-of-truth for
-the application state, greatly simplifying the programming model for the developer. You can think of
-the view as simply an instant projection of your model.
 
-Because the view is just a projection of the model, the controller is completely separated from the
-view and unaware of it. This makes testing a snap because it is easy to test your controller in
-isolation without the view and the related DOM/browser dependency.
+그림에서 보듯이 Angular 템플릿이 작동하는 방식은 전형적인 템플릿 시스템과는 다르다. 다른 이유는 첫번째로
+템플릿(추가되는 모든 마크업이나 지시자와 더불어 컴파일되지 않은 HTML)이 브라우저에서 컴파일된다는 것이다.
+그리고 두번째는 그러한 컴파일 단계에서 라이브 뷰가 만들어진다는 것이다. 라이브라고 부르는 이유는 뷰의
+모든 변경사항이 즉시 모델에 반영이 되며, 모델의 모든 변경사항 또한 뷰에 전파되기 때문이다. 이것은 모델이
+어플리케이션 상태에 대해 항상 단일정보의 가치(single-source-of-truth)를 갖을 수 있도록 하고, 개발자들에게는
+아주 간단한 프로그래밍 모델을 만들어 준다.
+
+뷰는 단지 모델을 투영하고만 있는 것이기 때문에 컨트롤러는 뷰와 완전히 분리되고 그것을 인식하지 못한다.
+이것이 어떤 한 순간의 상태를 테스트할 수 있게 한다. 왜냐하면 컨트롤러를 뷰 그리고 관련된 DOM/브라우저의
+종속성 없이 별개로 테스트하기 쉽기 때문이다.
 
 
-## Related Topics
+## 관련 토픽
 
-* {@link scope Angular Scopes}
-* {@link dev_guide.templates Angular Templates}
+* {@link scope Angular 스코프}
+* {@link dev_guide.templates Angular 템플릿}

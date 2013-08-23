@@ -1,23 +1,22 @@
 @ngdoc overview
-@name Developer Guide: Templates: Working With CSS in Angular
+@name Developer Guide: 템플릿: Angular에서 CSS 작업하기
 @description
 
+Angular는 아래의 CSS 클래스만을 설정한다. 유용한 스타일을 제공한는 것은 어플리케이션에 달려있다.
 
-Angular sets these CSS classes. It is up to your application to provide useful styling.
-
-# CSS classes used by angular
+# Angular에서 사용되는 CSS 클래스
 
 * `ng-invalid`, `ng-valid`
-  - **Usage:** angular applies this class to an input widget element if that element's input does
-    not pass validation. (see {@link api/ng.directive:input input} directive).
+  - **사용법:** Angular는 해당 요소의 입력값이 유효성 검사를 통과하지 못한 경우 input 위젯 요소에
+    이 클래스를 적용한다. ({@link api/ng.directive:input input} 지시자(directive)를 살펴보자)
 
 * `ng-pristine`, `ng-dirty`
-  - **Usage:** angular {@link api/ng.directive:input input} directive applies `ng-pristine` class
-    to a new input widget element which did not have user interaction. Once the user interacts with
-    the input widget the class is changed to `ng-dirty`.
+  - **사용법:** Angular의 {@link api/ng.directive:input input} 지시자는 사용자가 입력한 적이 없는
+    새로운 input 위젯 요소에 `ng-pristine` 클래스를 적용한다. 해당 input 위젯 요소에 사용자가
+    한번 입력을 하고 나면 `ng-dirty` 클래스로 변경된다.
 
 
-## Related Topics
+## 관련 토픽
 
-* {@link dev_guide.templates Angular Templates}
-* {@link forms Angular Forms}
+* {@link dev_guide.templates Angular의 템플릿}
+* {@link forms Angular의 폼}

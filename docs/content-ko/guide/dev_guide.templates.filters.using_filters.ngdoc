@@ -1,40 +1,39 @@
 @ngdoc overview
-@name Developer Guide: Templates: Filters: Using Angular Filters
+@name Developer Guide: 템플릿: 필터: Angular에서 필터 사용하기
 @description
 
-Filters can be part of any {@link api/ng.$rootScope.Scope} evaluation but are typically used to format
-expressions in bindings in your templates:
+필터는 특정 {@link api/ng.$rootScope.Scope}에 해당하는 계산의 일부가 될 수 있지만, 일반적으로는
+템플릿에 바인딩되는 표현식을 포맷팅(서식화)하기 위해 사용된다.
 
         {{ expression | filter }}
 
-Filters typically transform the data to a new data type, formatting the data in the process.
-Filters can also be chained, and can take optional arguments.
+필터는 보통 포맷팅하는 과정에서 데이터를 새로운 데이터 타입으로 변환한다.
+필터는 연결될 수 있고 선택적으로 인자를 받을 수도 있다.
 
-You can chain filters using this syntax:
+아래와 같은 구문을 사용해서 필터를 연결할 수 있다.
 
         {{ expression | filter1 | filter2 }}
 
-You can also pass colon-delimited arguments to filters, for example, to display the number 123 with
-2 decimal points:
+콜론 구분자를 사용해서 필터에 인자를 전달할 수도 있다. 아래의 예는 123라는 숫자를 소수점 두자리까지
+표시해주고 있다. 
 
         123 | number:2
 
-Here are some examples that show values before and after applying different filters to an
-expression in a binding:
+아래는 바인딩되는 표현식에 서로 다른 필터들을 적용하기 전과 적용한 후의 값을 보여주는
+몇가지 예제이다.
 
-* No filter: `{{1234.5678}}` => `1234.5678`
-* Number filter: `{{1234.5678|number}}` => `1,234.57`. Notice the "," and rounding to two
-significant digits.
-* Filter with arguments: `{{1234.5678|number:5}}` => `1,234.56780`. Filters can take optional
-arguments, separated by colons in a binding. For example, the "number" filter takes a number
-argument that specifies how many digits to display to the right of the decimal point.
+* 필터가 없는 경우: `{{1234.5678}}` => `1234.5678`
+* 숫자 filter: `{{1234.5678|number}}` => `1,234.57`. "," 과 소수점 두자리까지 반올림되는 것에 주의하자.
+* 필터에 인자를 사용: `{{1234.5678|number:5}}` => `1,234.56780`. 필터는 선택적으로 바인딩에 콜론으로
+구분해서 인자를 받을 수 있다. 예를 들면, "number" 필터에 숫자로 받는 인자는 소수점 몇자리까지
+보여줄 것인지를 명시하는 것이다.
 
 
-## Related Topics
+## 관련 토픽
 
-* {@link dev_guide.templates.filters Understanding Angular Filters}
-* {@link dev_guide.templates.filters.creating_filters Creating Angular Filters}
+* {@link dev_guide.templates.filters Angular의 필터 이해하기}
+* {@link dev_guide.templates.filters.creating_filters Angular에서 필터 생성하기}
 
-## Related API
+## 관련 API
 
-* {@link api/ng.$filter Angular Filter API}
+* {@link api/ng.$filter Angular의 필터 API}
