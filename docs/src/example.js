@@ -20,6 +20,7 @@ exports.Example = function(scenarios) {
   this.html = [];
   this.css = [];
   this.js = [];
+  this.json = [];
   this.unit = [];
   this.scenario = [];
   this.scenarios = scenarios;
@@ -57,12 +58,27 @@ exports.Example.prototype.addSource = function(name, content) {
   }
 };
 
+exports.Example.prototype.enableAnimations = function() {
+  this.animations = true;
+};
+
+exports.Example.prototype.disableAnimations = function() {
+  this.animations = false;
+};
+
 exports.Example.prototype.toHtml = function() {
-  return '<h2>Source</h2>\n' +
-          this.toHtmlEdit() +
-          this.toHtmlTabs() +
-          '<h2>Demo</h2>\n' +
-          this.toHtmlEmbed();
+  var html = "<h2>Source</h2>\n";
+  html += this.toHtmlEdit();
+  html += this.toHtmlTabs();
+  if(this.animations) {
+    html += '<div class="pull-right">';
+    html += ' <button class="btn btn-primary" ng-click="animationsOff=true" ng-hide="animationsOff">Animations on</button>';
+    html += ' <button class="btn btn-primary disabled" ng-click="animationsOff=false" ng-show="animationsOff">Animations off</button>';
+    html += '</div>';
+  }
+  html += "<h2>Demo</h2>\n";
+  html += this.toHtmlEmbed();
+  return html;
 };
 
 
@@ -73,6 +89,7 @@ exports.Example.prototype.toHtmlEdit = function() {
   out.push(' source-edit-html="' + ids(this.html) + '"');
   out.push(' source-edit-css="' + ids(this.css) + '"');
   out.push(' source-edit-js="' + ids(this.js) + '"');
+  out.push(' source-edit-json="' + ids(this.json) + '"');
   out.push(' source-edit-unit="' + ids(this.unit) + '"');
   out.push(' source-edit-scenario="' + ids(this.scenario) + '"');
   out.push('></div>\n');
@@ -87,6 +104,7 @@ exports.Example.prototype.toHtmlTabs = function() {
   htmlTabs(this.html);
   htmlTabs(this.css);
   htmlTabs(this.js);
+  htmlTabs(this.json);
   htmlTabs(this.unit);
   htmlTabs(this.scenario);
   out.push('</div>');
@@ -116,7 +134,10 @@ exports.Example.prototype.toHtmlTabs = function() {
 
 exports.Example.prototype.toHtmlEmbed = function() {
   var out = [];
-  out.push('<div class="well doc-example-live"');
+  out.push('<div class="well doc-example-live animate-container"');
+  if(this.animations) {
+    out.push(" ng-class=\"{'animations-off':animationsOff == true}\"");
+  }
   out.push(' ng-embed-app="' + this.module + '"');
   out.push(' ng-set-html="' + this.html[0].id + '"');
   out.push(' ng-eval-javascript="' + ids(this.js) + '">');

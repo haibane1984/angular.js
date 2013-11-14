@@ -8,11 +8,28 @@
  * @description
  * Fetches, compiles and includes an external HTML fragment.
  *
- * Keep in mind that Same Origin Policy applies to included resources
- * (e.g. ngInclude won't work for cross-domain requests on all browsers and for
- *  file:// access on some browsers).
+ * By default, the template URL is restricted to the same domain and protocol as the
+ * application document. This is done by calling {@link ng.$sce#methods_getTrustedResourceUrl
+ * $sce.getTrustedResourceUrl} on it. To load templates from other domains or protocols
+ * you may either {@link ng.$sceDelegateProvider#methods_resourceUrlWhitelist whitelist them} or
+ * {@link ng.$sce#methods_trustAsResourceUrl wrap them} as trusted values. Refer to Angular's {@link
+ * ng.$sce Strict Contextual Escaping}.
+ *
+ * In addition, the browser's
+ * {@link https://code.google.com/p/browsersec/wiki/Part2#Same-origin_policy_for_XMLHttpRequest
+ * Same Origin Policy} and {@link http://www.w3.org/TR/cors/ Cross-Origin Resource Sharing
+ * (CORS)} policy may further restrict whether the template is successfully loaded.
+ * For example, `ngInclude` won't work for cross-domain requests on all browsers and for `file://`
+ * access on some browsers.
+ *
+ * @animations
+ * enter - animation is used to bring new content into the browser.
+ * leave - animation is used to animate existing content away.
+ *
+ * The enter and leave animation occur concurrently.
  *
  * @scope
+ * @priority 400
  *
  * @param {string} ngInclude|src angular expression evaluating to URL. If the source is a string constant,
  *                 make sure you wrap it in quotes, e.g. `src="'myPartialTemplate.html'"`.
@@ -26,7 +43,7 @@
  *                  - Otherwise enable scrolling only if the expression evaluates to truthy value.
  *
  * @example
-  <example>
+  <example animations="true">
     <file name="index.html">
      <div ng-controller="Ctrl">
        <select ng-model="template" ng-options="t.name for t in templates">
@@ -34,7 +51,9 @@
        </select>
        url of the template: <tt>{{template.url}}</tt>
        <hr/>
-       <div ng-include src="template.url"></div>
+       <div class="slide-animate-container">
+         <div class="slide-animate" ng-include="template.url"></div>
+       </div>
      </div>
     </file>
     <file name="script.js">
@@ -51,6 +70,46 @@
     <file name="template2.html">
       Content of template2.html
     </file>
+    <file name="animations.css">
+      .slide-animate-container {
+        position:relative;
+        background:white;
+        border:1px solid black;
+        height:40px;
+        overflow:hidden;
+      }
+
+      .slide-animate {
+        padding:10px;
+      }
+
+      .slide-animate.ng-enter, .slide-animate.ng-leave {
+        -webkit-transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 0.5s;
+        transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 0.5s;
+
+        position:absolute;
+        top:0;
+        left:0;
+        right:0;
+        bottom:0;
+        display:block;
+        padding:10px;
+      }
+
+      .slide-animate.ng-enter {
+        top:-50px;
+      }
+      .slide-animate.ng-enter.ng-enter-active {
+        top:0;
+      }
+
+      .slide-animate.ng-leave {
+        top:0;
+      }
+      .slide-animate.ng-leave.ng-leave-active {
+        top:50px;
+      }
+    </file>
     <file name="scenario.js">
       it('should load template1.html', function() {
        expect(element('.doc-example-live [ng-include]').text()).
@@ -63,10 +122,20 @@
       });
       it('should change to blank', function() {
        select('template').option('');
-       expect(element('.doc-example-live [ng-include]').text()).toEqual('');
+       expect(element('.doc-example-live [ng-include]')).toBe(undefined);
       });
     </file>
   </example>
+ */
+
+
+/**
+ * @ngdoc event
+ * @name ng.directive:ngInclude#$includeContentRequested
+ * @eventOf ng.directive:ngInclude
+ * @eventType emit on the scope ngInclude was declared in
+ * @description
+ * Emitted every time the ngInclude content is requested.
  */
 
 
@@ -78,52 +147,66 @@
  * @description
  * Emitted every time the ngInclude content is reloaded.
  */
-var ngIncludeDirective = ['$http', '$templateCache', '$anchorScroll', '$compile',
-                  function($http,   $templateCache,   $anchorScroll,   $compile) {
+var ngIncludeDirective = ['$http', '$templateCache', '$anchorScroll', '$compile', '$animate', '$sce',
+                  function($http,   $templateCache,   $anchorScroll,   $compile,   $animate,   $sce) {
   return {
     restrict: 'ECA',
+    priority: 400,
     terminal: true,
-    compile: function(element, attr) {
+    transclude: 'element',
+    compile: function(element, attr, transclusion) {
       var srcExp = attr.ngInclude || attr.src,
           onloadExp = attr.onload || '',
           autoScrollExp = attr.autoscroll;
 
-      return function(scope, element) {
+      return function(scope, $element) {
         var changeCounter = 0,
-            childScope;
+            currentScope,
+            currentElement;
 
-        var clearContent = function() {
-          if (childScope) {
-            childScope.$destroy();
-            childScope = null;
+        var cleanupLastIncludeContent = function() {
+          if (currentScope) {
+            currentScope.$destroy();
+            currentScope = null;
           }
-
-          element.html('');
+          if(currentElement) {
+            $animate.leave(currentElement);
+            currentElement = null;
+          }
         };
 
-        scope.$watch(srcExp, function ngIncludeWatchAction(src) {
+        scope.$watch($sce.parseAsResourceUrl(srcExp), function ngIncludeWatchAction(src) {
+          var afterAnimation = function() {
+            if (isDefined(autoScrollExp) && (!autoScrollExp || scope.$eval(autoScrollExp))) {
+              $anchorScroll();
+            }
+          };
           var thisChangeId = ++changeCounter;
 
           if (src) {
             $http.get(src, {cache: $templateCache}).success(function(response) {
               if (thisChangeId !== changeCounter) return;
+              var newScope = scope.$new();
 
-              if (childScope) childScope.$destroy();
-              childScope = scope.$new();
+              transclusion(newScope, function(clone) {
+                cleanupLastIncludeContent();
 
-              element.html(response);
-              $compile(element.contents())(childScope);
+                currentScope = newScope;
+                currentElement = clone;
 
-              if (isDefined(autoScrollExp) && (!autoScrollExp || scope.$eval(autoScrollExp))) {
-                $anchorScroll();
-              }
-
-              childScope.$emit('$includeContentLoaded');
-              scope.$eval(onloadExp);
+                currentElement.html(response);
+                $animate.enter(currentElement, null, $element, afterAnimation);
+                $compile(currentElement.contents())(currentScope);
+                currentScope.$emit('$includeContentLoaded');
+                scope.$eval(onloadExp);
+              });
             }).error(function() {
-              if (thisChangeId === changeCounter) clearContent();
+              if (thisChangeId === changeCounter) cleanupLastIncludeContent();
             });
-          } else clearContent();
+            scope.$emit('$includeContentRequested');
+          } else {
+            cleanupLastIncludeContent();
+          }
         });
       };
     }

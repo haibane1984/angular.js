@@ -8,9 +8,6 @@
  * @description
  * Selects a subset of items from `array` and returns it as a new array.
  *
- * Note: This function is used to augment the `Array` type in Angular expressions. See
- * {@link ng.$filter} for more information about Angular arrays.
- *
  * @param {Array} array The source array.
  * @param {string|Object|function()} expression The predicate to be used for selecting items from
  *   `array`.
@@ -32,6 +29,22 @@
  *     called for each element of `array`. The final result is an array of those elements that
  *     the predicate returned true for.
  *
+ * @param {function(expected, actual)|true|undefined} comparator Comparator which is used in
+ *     determining if the expected value (from the filter expression) and actual value (from
+ *     the object in the array) should be considered a match.
+ *
+ *   Can be one of:
+ *
+ *     - `function(expected, actual)`:
+ *       The function will be given the object value and the predicate value to compare and
+ *       should return true if the item should be included in filtered result.
+ *
+ *     - `true`: A shorthand for `function(expected, actual) { return angular.equals(expected, actual)}`.
+ *       this is essentially strict comparison of expected and actual.
+ *
+ *     - `false|undefined`: A short hand for a function which will look for a substring match in case
+ *       insensitive way.
+ *
  * @example
    <doc:example>
      <doc:source>
@@ -39,7 +52,8 @@
                                 {name:'Mary', phone:'800-BIG-MARY'},
                                 {name:'Mike', phone:'555-4321'},
                                 {name:'Adam', phone:'555-5678'},
-                                {name:'Julie', phone:'555-8765'}]"></div>
+                                {name:'Julie', phone:'555-8765'},
+                                {name:'Juliette', phone:'555-5678'}]"></div>
 
        Search: <input ng-model="searchText">
        <table id="searchTextResults">
@@ -52,10 +66,11 @@
        <hr>
        Any: <input ng-model="search.$"> <br>
        Name only <input ng-model="search.name"><br>
-       Phone only <input ng-model="search.phone"å><br>
+       Phone only <input ng-model="search.phone"><br>
+       Equality <input type="checkbox" ng-model="strict"><br>
        <table id="searchObjResults">
          <tr><th>Name</th><th>Phone</th></tr>
-         <tr ng-repeat="friend in friends | filter:search">
+         <tr ng-repeat="friend in friends | filter:search:strict">
            <td>{{friend.name}}</td>
            <td>{{friend.phone}}</td>
          </tr>
@@ -75,15 +90,24 @@
        it('should search in specific fields when filtering with a predicate object', function() {
          input('search.$').enter('i');
          expect(repeater('#searchObjResults tr', 'friend in friends').column('friend.name')).
-           toEqual(['Mary', 'Mike', 'Julie']);
+           toEqual(['Mary', 'Mike', 'Julie', 'Juliette']);
+       });
+       it('should use a equal comparison when comparator is true', function() {
+         input('search.name').enter('Julie');
+         input('strict').check();
+         expect(repeater('#searchObjResults tr', 'friend in friends').column('friend.name')).
+           toEqual(['Julie']);
        });
      </doc:scenario>
    </doc:example>
  */
 function filterFilter() {
-  return function(array, expression) {
+  return function(array, expression, comparator) {
     if (!isArray(array)) return array;
-    var predicates = [];
+
+    var comparatorType = typeof(comparator),
+        predicates = [];
+
     predicates.check = function(value) {
       for (var j = 0; j < predicates.length; j++) {
         if(!predicates[j](value)) {
@@ -92,20 +116,40 @@ function filterFilter() {
       }
       return true;
     };
+
+    if (comparatorType !== 'function') {
+      if (comparatorType === 'boolean' && comparator) {
+        comparator = function(obj, text) {
+          return angular.equals(obj, text);
+        };
+      } else {
+        comparator = function(obj, text) {
+          text = (''+text).toLowerCase();
+          return (''+obj).toLowerCase().indexOf(text) > -1;
+        };
+      }
+    }
+
     var search = function(obj, text){
-      if (text.charAt(0) === '!') {
+      if (typeof text == 'string' && text.charAt(0) === '!') {
         return !search(obj, text.substr(1));
       }
       switch (typeof obj) {
         case "boolean":
         case "number":
         case "string":
-          return ('' + obj).toLowerCase().indexOf(text) > -1;
+          return comparator(obj, text);
         case "object":
-          for ( var objKey in obj) {
-            if (objKey.charAt(0) !== '$' && search(obj[objKey], text)) {
-              return true;
-            }
+          switch (typeof text) {
+            case "object":
+              return comparator(obj, text);
+            default:
+              for ( var objKey in obj) {
+                if (objKey.charAt(0) !== '$' && search(obj[objKey], text)) {
+                  return true;
+                }
+              }
+              break;
           }
           return false;
         case "array":
@@ -123,24 +167,26 @@ function filterFilter() {
       case "boolean":
       case "number":
       case "string":
+        // Set up expression object and fall through
         expression = {$:expression};
+        // jshint -W086
       case "object":
+        // jshint +W086
         for (var key in expression) {
           if (key == '$') {
             (function() {
-              var text = (''+expression[key]).toLowerCase();
-              if (!text) return;
+              if (!expression[key]) return;
+              var path = key;
               predicates.push(function(value) {
-                return search(value, text);
+                return search(value, expression[path]);
               });
             })();
           } else {
             (function() {
+              if (typeof(expression[key]) == 'undefined') { return; }
               var path = key;
-              var text = (''+expression[key]).toLowerCase();
-              if (!text) return;
               predicates.push(function(value) {
-                return search(getter(value, path), text);
+                return search(getter(value,path), expression[path]);
               });
             })();
           }
@@ -160,5 +206,5 @@ function filterFilter() {
       }
     }
     return filtered;
-  }
+  };
 }

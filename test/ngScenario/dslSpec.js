@@ -227,6 +227,7 @@ describe("angular.scenario.dsl", function() {
         $root.dsl.select('test').option('A');
         expect(doc.find('[data-ng-model="test"]').val()).toEqual('A');
       });
+
       it('should select single option using x-ng', function() {
         doc.append(
           '<select x-ng-model="test">' +
@@ -238,14 +239,25 @@ describe("angular.scenario.dsl", function() {
         expect(doc.find('[x-ng-model="test"]').val()).toEqual('A');
       });
 
-
-
-
-      it('should select option by name', function() {
+      it('should select option by exact name', function() {
         doc.append(
             '<select ng-model="test">' +
-            '  <option value=A>one</option>' +
+            '  <option value=A>twenty one</option>' +
             '  <option value=B selected>two</option>' +
+            '  <option value=C>thirty one</option>' +
+            '  <option value=D>one</option>' +
+            '</select>'
+          );
+          $root.dsl.select('test').option('one');
+          expect(doc.find('[ng-model="test"]').val()).toEqual('D');
+      });
+
+      it('should select option by name if no exact match and name contains value', function() {
+        doc.append(
+            '<select ng-model="test">' +
+            '  <option value=A>twenty one</option>' +
+            '  <option value=B selected>two</option>' +
+            '  <option value=C>thirty one</option>' +
             '</select>'
           );
           $root.dsl.select('test').option('one');
@@ -270,6 +282,16 @@ describe("angular.scenario.dsl", function() {
         expect($root.futureError).toMatch(/did not match/);
       });
 
+      it('should fail to select an option that does not exist', function(){
+          doc.append(
+              '<select ng-model="test">' +
+              '  <option value=A>one</option>' +
+              '  <option value=B selected>two</option>' +
+              '</select>'
+            );
+            $root.dsl.select('test').option('three');
+            expect($root.futureError).toMatch(/not found/);
+      });
     });
 
     describe('Element', function() {
@@ -296,13 +318,105 @@ describe("angular.scenario.dsl", function() {
             elm = jqLite('<a href="#foo"></a>');
 
         doc.append(elm);
-        elm.bind('click', function(event) {
+        elm.on('click', function(event) {
           event.preventDefault();
         });
 
         $root.dsl.element('a').click();
         expect($window.location).toBe(initLocation);
         dealoc(elm);
+      });
+
+      it('should execute dblclick', function() {
+        var clicked;
+        // Hash is important, otherwise we actually
+        // go to a different page and break the runner
+        doc.append('<a href="#"></a>');
+        doc.find('a').dblclick(function() {
+          clicked = true;
+        });
+        $root.dsl.element('a').dblclick();
+      });
+
+      it('should navigate page if dblclick on anchor', function() {
+        expect($window.location).not.toEqual('#foo');
+        doc.append('<a href="#foo"></a>');
+        $root.dsl.element('a').dblclick();
+        expect($window.location).toMatch(/#foo$/);
+      });
+
+      it('should not navigate if dblclick event was cancelled', function() {
+        var initLocation = $window.location,
+            elm = jqLite('<a href="#foo"></a>');
+
+        doc.append(elm);
+        elm.on('dblclick', function(event) {
+          event.preventDefault();
+        });
+
+        $root.dsl.element('a').dblclick();
+        expect($window.location).toBe(initLocation);
+        dealoc(elm);
+      });
+
+      it('should execute mouseover', function() {
+        var mousedOver;
+        doc.append('<div></div>');
+        doc.find('div').mouseover(function() {
+          mousedOver = true;
+        });
+        $root.dsl.element('div').mouseover();
+        expect(mousedOver).toBe(true);
+      });
+
+      it('should bubble up the mouseover event', function() {
+        var mousedOver;
+        doc.append('<div id="outer"><div id="inner"></div></div>');
+        doc.find('#outer').mouseover(function() {
+          mousedOver = true;
+        });
+        $root.dsl.element('#inner').mouseover();
+        expect(mousedOver).toBe(true);
+      });
+
+      it('should execute mousedown', function() {
+        var mousedDown;
+        doc.append('<div></div>');
+        doc.find('div').mousedown(function() {
+          mousedDown = true;
+        });
+        $root.dsl.element('div').mousedown();
+        expect(mousedDown).toBe(true);
+      });
+
+      it('should bubble up the mousedown event', function() {
+        var mousedDown;
+        doc.append('<div id="outer"><div id="inner"></div></div>');
+        doc.find('#outer').mousedown(function() {
+          mousedDown = true;
+        });
+        $root.dsl.element('#inner').mousedown();
+        expect(mousedDown).toBe(true);
+      });
+
+      it('should execute mouseup', function() {
+        var mousedUp;
+        doc.append('<div></div>');
+        doc.find('div').mouseup(function() {
+          mousedUp = true;
+        });
+        $root.dsl.element('div').mouseup();
+        expect(mousedUp).toBe(true);
+      });
+
+      it('should bubble up the mouseup event', function() {
+        var mousedUp;
+        doc.append('<div id="outer"><div id="inner"></div></div>');
+        doc.find('#outer').mouseup(function() {
+          mousedUp = true;
+        });
+        $root.dsl.element('#inner').mouseup();
+        expect(mousedUp).toBe(true);
       });
 
       it('should count matching elements', function() {

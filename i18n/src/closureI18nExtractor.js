@@ -9,6 +9,7 @@ exports.pluralExtractor = pluralExtractor;
 exports.outputLocale = outputLocale;
 exports.correctedLocaleId = correctedLocaleId;
 exports.findLocaleId = findLocaleId;
+exports.serializeContent = serializeContent;
 
 var goog = { provide: function() {},
   require: function() {},
@@ -115,7 +116,7 @@ function canonicalizeForJsonStringify(unused_key, object) {
   //    2. https://code.google.com/p/v8/issues/detail?id=164
   //       ECMA-262 does not specify enumeration order. The de facto standard
   //       is to match insertion order, which V8 also does ...
-  if (typeof object != "object") {
+  if (typeof object != "object" || Object.prototype.toString.apply(object) === '[object Array]') {
     return object;
   }
   var result = {};
@@ -123,6 +124,12 @@ function canonicalizeForJsonStringify(unused_key, object) {
     result[key] = object[key];
   });
   return result;
+}
+
+function serializeContent(localeObj) {
+  return JSON.stringify(localeObj, canonicalizeForJsonStringify, '  ')
+    .replace(new RegExp('[\\u007f-\\uffff]', 'g'), function(c) { return '\\u'+('0000'+c.charCodeAt(0).toString(16)).slice(-4); })
+    .replace(/"@@|@@"/g, '');
 }
 
 function outputLocale(localeInfo, localeID) {
@@ -152,6 +159,7 @@ function outputLocale(localeInfo, localeID) {
   localeObj.id = correctedLocaleId(localeID);
 
   var prefix =
+      "'use strict';\n" +
       'angular.module("ngLocale", [], ["$provide", function($provide) {\n' +
           'var PLURAL_CATEGORY = {' +
           'ZERO: "zero", ONE: "one", TWO: "two", FEW: "few", MANY: "many", OTHER: "other"' +
@@ -167,9 +175,7 @@ function outputLocale(localeInfo, localeID) {
     id: localeObj.id
   };
 
-  var content = JSON.stringify(localeInfo[localeID], canonicalizeForJsonStringify, '  ')
-      .replace(/\¤/g, '\\u00A4')
-      .replace(/"@@|@@"/g, '');
+  var content = serializeContent(localeInfo[localeID]);
 
   return prefix + content + suffix;
 }
