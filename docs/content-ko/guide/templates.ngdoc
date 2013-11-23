@@ -2,9 +2,8 @@
 @name 템플릿(templates)
 @description
 
-An Angular template is the declarative specification that, along with information from the model
-and controller, becomes the rendered view that a user sees in the browser. It is the static DOM,
-containing HTML, CSS, and angular-specific elements and angular-specific element attributes.  The
+Angular 템플릿은 모델과 컨틀로러의 정보와 함께 추후에 브라우저에서 사용자가 보게될 화면이 되는 선언적 명세서이다.
+It is the static DOM, containing HTML, CSS, and angular-specific elements and angular-specific element attributes.  The
 Angular elements and attributes direct angular to add behavior and transform the template DOM into
 the dynamic view DOM.
 
