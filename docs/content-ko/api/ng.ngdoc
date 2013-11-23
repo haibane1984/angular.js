@@ -2,4 +2,7 @@
 @name ng
 @description
 
-'ng'는 주요 angular 서비스(service)의 모든 것을 담고 있는 angular 모듈(module)입니다.
+# ng (core module)
+The ng module is loaded by default when an AngularJS application is started. The module itself contains the essential components to for an AngularJS application to function. The table below lists a high level breakdown of each of the services/factories, filters, directives and testing components available within this core module.
+
+<div doc-module-components="ng"></div>

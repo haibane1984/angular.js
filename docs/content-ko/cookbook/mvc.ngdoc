@@ -2,12 +2,14 @@
 @name Cookbook: MVC
 @description
 
-MVC는 깔끔하고, 행동(behavior, controller)와 뷰(HTML 템플릿)를 테스트 가능하도록 구분할 수 있게 한다. 컨트롤러(controller)는 그러 뷰의
-스콥(scope)에 접목된 자바스크립트 클래스이다. 이는 컨트롤러와 뷰가 모델을 공유할 수 있도록 쉽게 만들어줍니다.
+MVC allows for a clean and testable separation between the behavior (controller) and the view
+(HTML template). A Controller is just a JavaScript class which is grafted onto the scope of the
+view. This makes it very easy for the controller and the view to share the model.
 
-모델은 스콥오브젝트(($scope)로부터 참조되는 기초요소와 오브젝트 세트 입니다.
-이는 컨트롤러를 쉽게 인스턴트화 할 수 있고, 뷰 없이 테스트를 할 수 있기 때문에 독립 상태에서 모델이 컨트롤러를 아주 쉽게 테스트하도록 만들어줍니다. 이는
-컨트롤러와 뷰 사이에 어떠한 연결도 없기 때문입니다.
+The model is a set of objects and primitives that are referenced from the Scope ($scope) object.
+This makes it very easy to test the controller in isolation since one can simply instantiate the
+controller and test without a view, because there is no connection between the controller and the
+view.
 
 
 <doc:example>
@@ -83,8 +85,8 @@ MVC는 깔끔하고, 행동(behavior, controller)와 뷰(HTML 템플릿)를 테�
     Next Player: {{nextMove}}
     <div class="winner" ng-show="winner">Player {{winner}} has won!</div>
       <table class="board">
-        <tr ng-repeat="row in board" style="height:15px;">
-          <td ng-repeat="cell in row" ng-style="cellStyle"
+        <tr ng-repeat="row in board track by $index" style="height:15px;">
+          <td ng-repeat="cell in row track by $index" ng-style="cellStyle"
               ng-click="dropPiece($parent.$index, $index)">{{cell}}</td>
         </tr>
       </table>
@@ -110,15 +112,17 @@ MVC는 깔끔하고, 행동(behavior, controller)와 뷰(HTML 템플릿)를 테�
 </doc:example>
 
 
-# 알아두어야 할 사항들
+# Things to notice
 
-* 컨트롤러는 자바스크립트로 정의 되어있고, 렌더링로직(rendering logic)을 참조하지 않습니다..
-* 컨트롤러는 Angular에 의해 인스턴트화 되었고, 뷰에 주입되었습니다.
-* 컨트롤러는 독립상태(뷰 없이) 인스턴트화 되었지만, 여전히 실행 가능할 것 입니다. 이는 테스트가 가능하도록 합니다.
-* HTML 뷰는 모델의 형상화 입니다. 위의 예제에서 모델은 보드 변수(board variable)에 저장됩니다.
-* 모든 컨트롤러의 프로퍼티(properties - board, nextMove와 같은)는 뷰에서 접근 가능합니다.
-* 모델을 변경하는 것은 뷰를 변경합니다.
-* 뷰는 어떤 컨트롤러 함수든 호출 할 수 있습니다.
-* 예제에서 `setUrl()` 와 `readUrl()`함수는 브라우저(browser)의 뒤로가기 버튼이 게임 단계를 되돌릴 수 있도록 하기 위해서 URL의 해쉬(hash)로 또는
-해쉬로 부터 게임 상태를 복사합니다. 딥 링킹을 확인하십시오. 이 예제는 필요할 때 `readUrl()`를 발현하도록 리스너(listener)를 설정하기 위해서
-{@link api/ng.$rootScope.Scope#$watch $watch()}를 호출 합니다.
+* The controller is defined in JavaScript and has no reference to the rendering logic.
+* The controller is instantiated by Angular and injected into the view.
+* The controller can be instantiated in isolation (without a view) and the code will still execute.
+This makes it very testable.
+* The HTML view is a projection of the model. In the above example, the model is stored in the
+board variable.
+* All of the controller's properties (such as board and nextMove) are available to the view.
+* Changing the model changes the view.
+* The view can call any controller function.
+* In this example, the `setUrl()` and `readUrl()` functions copy the game state to/from the URL's
+hash so the browser's back button will undo game steps. See deep-linking. This example calls {@link
+api/ng.$rootScope.Scope#methods_$watch $watch()} to set up a listener that invokes `readUrl()` when needed.

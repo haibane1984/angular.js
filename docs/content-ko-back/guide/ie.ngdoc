@@ -1,0 +1,147 @@
+@ngdoc overview
+@name 개발자 가이드: Internet Explorer 호환성
+@description
+
+# 개요
+
+이 문서는 사용자정의 속성과 태그를 처리할 때 Internet Explorer(이하 IE)의 고유한 특성에 대해 설명합니다. IE8이나 이하 버전에서 Angular 애플리케이션을 사용할 계획이라면 이 문서를 읽어주시기 바랍니다.
+
+# 짧은 버전
+
+Angular 어플리케이션을 IE에서 동작하게 하기 위해 다음을 확인해주시기 바랍니다:
+
+  1. 필요하다면 JSON.stringify를 polyfill 해야합니다.  [JSON2](https://github.com/douglascrockford/JSON-js)이나 [JSON3](http://bestiejs.github.com/json3/)로 polyfill 할 수 있습니다.
+     
+  2. `<ng:view>`같은 사용자정의 태그들을 사용하면 **안 됩니다**(대신 속성을 이용해서 `<div ng-view>`와 같이 사용하세요).
+
+  3. 사용자정의 태그들을 사용해야 한다면, 반드시 아래와 같이 작성해야 합니다.
+
+<pre>
+  <html xmlns:ng="http://angularjs.org">
+    <head>
+      <!--[if lte IE 8]>
+        <script>
+          document.createElement('ng-include');
+          document.createElement('ng-pluralize');
+          document.createElement('ng-view');
+
+          // Optionally these for CSS
+          document.createElement('ng:include');
+          document.createElement('ng:pluralize');
+          document.createElement('ng:view');
+        </script>
+      <![endif]-->
+    </head>
+    <body>
+      ...
+    </body>
+  </html>
+</pre>
+
+**중요한** 부분은:
+
+  * `xmlns:ng` - *네임스페이스* - 사용하기로 한 각 사용자정의 태그마다 하나의 네임스페이스가 필요합니다.
+
+  * `document.createElement(태그이름)` - *사용자정의 태그이름의 생성* - 이것은 구 버전 IE에서만의 이슈이기 때문에 이 부분을 조건적으로 사용해야 합니다. 각 태그가 네임스페이스를 가지고 있지 않거나 HTML에 정의되어 있지 않을 때 미리 선언해야 합니다. 
+
+
+# 긴 버전
+
+IE에서는 표준 HTML 태그 이름이 아닌 태그 이름을 사용하는데에 문제가 있습니다. 이 문제는 두 분류로 나누어 지는데 각 분류마다 해결 방안이 있습니다.
+
+  * 태그 이름이 `my:`라는 접두사로 시작한다면 이것은 XML 네임스페이스를 고려한 것이고, `<html xmlns:my="ignored">`의 선언과 같은 네임스페이스의 선언이 있어야 합니다.  
+
+  * 태그가 `:`를 가지고 있지 않지만 표준 HTML 태그가 아니라면 `document.createElement('my-tag')`를 사용하여 미리 선언해야 합니다. 
+
+  * CSS 셀렉터를 이용하여 사용자정의 태그에 스타일을 적용할 계획이라면 XML 네임스페이스에 관계없이 `document.createElement('my-tag')`를 사용하여 꼭 미리 선언해야 합니다.
+
+
+## 좋은 소식
+
+좋은 소식은 이런 제약조건들이 엘리먼트 태그이름에만 적용되고 엘리먼트 속성이름에는 적용되지 않는다는 것입니다. 따라서 IE에서 이런 특별한 처리가 필요하지 않습니다: `<div my-tag your:tag></div>`.
+
+
+## 이것을 하지 않으면 무슨 일이 일어날까요?
+
+`mytag`라는 정의 되지 않은 태그를 사용한다고 하면(`my:tag`나 `my-tag`를 사용해도 결과는 같습니다):
+
+<pre>
+  <html>
+    <body>
+      <mytag>some text</mytag>
+    </body>
+  </html>
+</pre>
+
+이것은 아래의 DOM과 같이 분석되어야 합니다.
+
+<pre>
+#document
+  +- HTML
+     +- BODY
+        +- mytag
+           +- #text: some text
+</pre>
+
+`BODY`엘리먼트가 `mytag`라는 자식 엘리먼트를 가지고 다음에는 `some text`라는 문자를 가질 것이라 예상했을 것입니다. 
+
+하지만 IE에서는(위의 수정사항들이 포함되어 있지 않은 경우):
+
+<pre>
+#document
+  +- HTML
+     +- BODY
+        +- mytag
+        +- #text: some text
+        +- /mytag
+</pre>
+
+IE에서는 `BODY`엘리먼트가 세 개의 자식을 가질 것입니다. 
+
+  1. 셀프클로징 `mytag`. 셀프클로징의 예로 `<br/>`을 들 수 있습니다. 뒤에 따르는 `/`는 선택사항이고 `<br>some text</br>`는 `some text`를 자식으로 두는 `<br>`이 아닌 세 개의 형제로 브라우저는 여길 것입니다.(`<br>`태그는 어떠한 자식도 허용하지 않습니다)   
+
+  2. 텍스트 노드 `some text`. 이것은 위 `mytag`의 형제가 아닌 자식이 되었어야 합니다.
+
+  3. 잘못된 셀프클로징 `/mytag`. 게다가 이 닫힌 엘리먼트는 DOM의 구조만 나타냈기 때문에 DOM의 일부가 되지 않습니다.  
+
+
+## 사용자정의 태그이름의 CSS 스타일링
+
+사용자정의 엘리먼트에 CSS 셀렉터가 동작하게 하기 위해 XML 네임스페이스에 관계없이 사용자정의 태그이름은 `document.createElement('my-tag')`와 같이 미리 선언되어야 합니다. 
+
+<pre>
+  <html xmlns:ng="needed for ng: namespace">
+    <head>
+      <!--[if lte IE 8]>
+        <script>
+          // needed to make ng-include parse properly
+          // ng-include가 분석되게 하기위해 필요
+          document.createElement('ng-include');
+
+          // needed to enable CSS reference
+          // CSS 참조를 가능하게 하는데 필요
+          document.createElement('ng:view');
+        </script>
+      <![endif]-->
+      <style>
+        ng\\:view {
+          display: block;
+          border: 1px solid red;
+        }
+
+        ng-include {
+          display: block;
+          border: 1px solid blue;
+        }
+      </style>
+    </head>
+    <body>
+      <ng:view></ng:view>
+      <ng-include></ng-include>
+      ...
+    </body>
+  </html>
+</pre>
+
+
+
