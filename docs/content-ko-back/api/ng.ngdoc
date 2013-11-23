@@ -1,0 +1,5 @@
+@ngdoc overview
+@name ng
+@description
+
+'ng'는 주요 angular 서비스(service)의 모든 것을 담고 있는 angular 모듈(module)입니다.

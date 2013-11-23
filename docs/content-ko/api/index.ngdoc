@@ -1,0 +1,295 @@
+@ngdoc overview
+@name API Reference
+@description
+
+# AngularJS API Docs
+AngularJS API 문서 페이지에 오신 것을 환영합니다. 이 페이지들은 AngularJS 버젼이 <strong ng-bind="version"></strong>인 레퍼런스 자료들 입니다.
+
+이 문서는 AngularJS 어플리케이션의 다양한 컴포넌트들을 포함하고 있는 모듈 단위로 분류 되어 있습니다. 여기서 컴포넌트들이란 지시자(directives), 서비스(services), 필터(filters), 제공자(providers), 타입(types), 전역 APIs(global APIs) 그리고 테스팅 목(mocks)들 입니다.
+
+<div class="alert alert-info">
+**Angular 네임스페이스 `$` and `$$`**
+
+여러분의 코드와의 실수로 인한 이름 충돌(name collisions)을 방지하기 위해서 Angular는 공개 객체는 $로 비공개 객체는 $$로 이름 앞에 해당 문자를 놓습니다.
+여러분의 코드에서 $ 혹은 $$를 사용하지 않길 바랍니다.
+</div>
+
+## Angular 네임스페이스
+
+## {@link ng ng (core module)}
+이 모듈은 기본으로 제공되고 AngularJS의 주요 컴포넌트들을 포함하고 있습니다.
+
+<table class="definition-table spaced">
+  <tr>
+    <td>{@link ng#directive 지시자(Directives)}</td>
+    <td>
+      <p>
+        AngularJS 어플리케이션을 만들기 위해서 여러분의 템플릿 코드에서 사용되어질 주요 지시자들의 목록입니다.
+      </p>
+
+      <p>
+        아래와 같은 예제들을 포함합니다. :
+          {@link ng.directive:ngClick ngClick},
+          {@link ng.directive:ngInclude ngInclude},
+          {@link ng.directive:ngRepeat ngRepeat},
+          etc… <br />
+      </p>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      {@link ng#service 서비스/펙토리(Services / Factories)}
+    </td>
+    <td>
+      <p>
+        여러분의 어플리케이션의 DI로 사용되어질 주요 서비스들입니다.
+      </p>
+      <p>
+        아래와 같은 예제들을 포함합니다. :
+          {@link ng.$compile $compile},
+          {@link ng.$http $http},
+          {@link ngRoute.$routeParams $routeParams},
+          {@link ng.$location $location},
+          기타…
+      <p>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      {@link ng#filter 필터(Filters)}
+    </td>
+    <td>
+      <p>
+        ng 모듈에서 제공하는 주요 필터들 입니다. 필터는 지시자와 표현식에서 템플릿 데이터가 그려지기(render)전에 해당 템플릿 데이터를 변경하기 위한 용도로 사용됩니다.
+      </p>
+      <p>
+        아래와 같은 예제들을 포함합니다. :
+          {@link ng.filter:filter filter},
+          {@link ng.filter:date date},
+          {@link ng.filter:currency currency},
+          {@link ng.filter:lowercase lowercase},
+          {@link ng.filter:uppercase uppercase},
+            기타...
+      </p>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      {@link ng#function 전역 API(Global APIs)}
+    </td>
+    <td>
+      <p>
+        angular 객체로 접근 가능한 주요 전역 API 함수들(The core global API functions)입니다. 이 주요 함수들은 여러분의 코드에서 낮은 수준(lower lever)의 자바스크립트 조작(operation)을 위하여 유용하게 사용됩니다.
+      </p>
+      <p>
+        아래와 같은 예제들을 포함합니다. :
+        {@link angular.copy angular.copy()},
+        {@link angular.equals angular.equals()},
+        {@link angular.element angular.element()},
+          기타...
+      </p>
+    </td>
+  </tr>
+</table>
+
+
+## {@link ngRoute ngRoute}
+
+Use ngRoute to enable URL routing to your application. The ngRoute module supports URL management via both hashbang and HTML5 pushState.
+
+<div class="alert alert-info">Include the **angular-route.js** file and set **ngRoute** as a dependency for this to work in your application.</div>
+
+<table class="definition-table spaced">
+  <tr>
+    <td>
+      {@link ngRoute#service Services / Factories}
+    </td>
+    <td>
+      The following services are used for route management:
+      <ul>
+        <li>{@link ngRoute.$routeParams $routeParams} is used to access the querystring values present in the URL.</li>
+        <li>{@link ngRoute.$route $route} is used to access the details of the route that is currently being accessed.</li>
+        <li>{@link ngRoute.$routeProvider $routeProvider} is used to register routes for the application.</li>
+      </ul>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      {@link ngRoute#directive Directives}
+    </td>
+    <td>
+      The {@link ngRoute.directive:ngView ngView} directive will display the template of the current route within the page.
+    </td>
+  </tr>
+</table>
+
+
+## {@link ngAnimate ngAnimate}
+
+Use ngAnimate to enable animation features into your application. Various core ng directives will provide
+animation hooks into your application when ngAnimate is included. Animations are defined by using CSS transitions/animations
+or JavaScript callbacks.
+
+<div class="alert alert-info">Include the **angular-animate.js** file and set **ngAnimate** as a dependency for this to work in your application.</div>
+
+<table class="definition-table spaced">
+  <tr>
+    <td>
+      {@link ngAnimate#service Services / Factories}
+    </td>
+    <td>
+      Use {@link ngAnimate.$animate $animate} to trigger animation operations within your directive code.
+    </td>
+  </tr>
+  <tr>
+    <td>
+      {@link ngAnimate CSS-based animations}
+    </td>
+    <td>
+      Follow ngAnimate’s CSS naming structure to reference CSS transitions / keyframe animations in AngularJS. Once defined the animation can be triggered by referencing the CSS class within the HTML template code.
+    </td>
+  </tr>
+  <tr>
+    <td>
+      {@link ngAnimate JS-based animations}
+    </td>
+    <td>
+      Use {@link angular.Module#methods_animation module.animation()} to register a JavaScript animation. Once registered the animation can be triggered by referencing the CSS class within the HTML template code.
+    </td>
+  </tr>
+</table>
+
+
+## {@link ngResource ngResource}
+
+Use the ngResource module when querying and posting data to a REST API.
+
+<div class="alert alert-info">Include the **angular-resource.js** file and set **ngResource** as a dependency for this to work in your application.</div>
+
+<table class="definition-table spaced">
+  <tr>
+    <td>
+      {@link ngResource#service Services / Factories}
+    </td>
+    <td>
+      The {@link ngResource.$resource $resource} service is used to define RESTful objects which communicate with a REST API.
+    </td>
+  </tr>
+</table>
+
+## {@link ngCookies ngCookies}
+
+Use the ngCookies module to handle cookie management within your application.
+
+<div class="alert alert-info">Include the **angular-cookies.js** file and set **ngCookies** as a dependency for this to work in your application.</div>
+
+<table class="definition-table spaced">
+  <tr>
+    <td>
+      {@link ngCookies#service Services / Factories}
+    </td>
+    <td>
+      The following services are used for cookie management:
+      <ul>
+        <li>The {@link ngCookies.$cookies $cookie} service is a convenient wrapper to store simple data within browser cookies.</li>
+        <li>{@link ngCookies.$cookieStore $cookieStore} is used to store more complex data using serialization.</li>
+      </ul>
+    </td>
+  </tr>
+</table>
+
+## {@link ngTouch ngTouch}
+
+Use ngTouch when developing for mobile browsers/devices.
+
+<div class="alert alert-info">Include the **angular-touch.js** file and set **ngTouch** as a dependency for this to work in your application.</div>
+
+<table class="definition-table spaced">
+  <tr>
+    <td>
+      {@link ngTouch#service Services / Factories}
+    </td>
+    <td>
+      The {@link ngTouch.$swipe $swipe} service is used to register and manage mobile DOM events. 
+    </td>
+  </tr>
+  <tr>
+    <td>
+      {@link ngTouch#directive Directives}
+    </td>
+    <td>
+      Various directives are available in ngTouch to emulate mobile DOM events.
+    </td>
+  </tr>
+</table>
+
+## {@link ngSanitize ngSanitize}
+
+Use ngSanitize to securely parse and manipulate HTML data in your application.
+
+<div class="alert alert-info">Include the **angular-sanitize.js** file and set **ngSanitize** as a dependency for this to work in your application.</div>
+
+<table class="definition-table spaced">
+  <tr>
+    <td>
+      {@link ngSanitize#service Services / Factories}
+    </td>
+    <td>
+      The {@link ngSanitize.$sanitize $sanitize} service is used to clean up dangerous HTML code in a quick and convenient way.
+    </td>
+  </tr>
+  <tr>
+    <td>
+      {@link ngTouch#filter Filters}
+    </td>
+    <td>
+      The {@link ngSanitize.filter:linky linky filter} is used to turn URLs into HTML links within the provided string.
+    </td>
+  </tr>
+</table>
+
+## {@link ngMock ngMock}
+
+Use ngMock to inject and mock modules, factories, services and providers within your unit tests 
+
+<div class="alert alert-info">Include the **angular-mocks.js** file into your test runner for this to work.</div>
+
+<table class="definition-table spaced">
+  <tr>
+    <td>
+      {@link ngMock#service Services / Factories}
+    </td>
+    <td>
+      <p>
+        ngMock will extend the behavior of various core services to become testing aware and manageable in a synchronous manner.
+      <p>
+
+      <p>
+        Some examples include:
+          {@link ngMock.$timeout $timeout},
+          {@link ngMock.$interval $interval},
+          {@link ngMock.$log $log},
+          {@link ngMock.$httpBackend $httpBackend},
+          etc...
+      <p>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      {@link ngMock#function Global APIs}
+    </td>
+    <td>
+      <p>
+        Various helper functions are available to inject and mock modules within unit test code.
+      </p>
+
+      <p>
+        Some examples
+          {@link angular.mock.inject inject()},
+          {@link angular.mock.module module()},
+          {@link angular.mock.dump dump()},
+          etc...
+      <p>
+    </td>
+  </tr>
+</table>

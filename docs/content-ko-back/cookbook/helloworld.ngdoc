@@ -1,0 +1,36 @@
+@ngdoc overview
+@name Cookbook: Hello World
+@description
+
+<doc:example>
+ <doc:source>
+  <script>
+    function HelloCntl($scope) {
+      $scope.name = 'World';
+    }
+  </script>
+  <div ng-controller="HelloCntl">
+    Your name: <input type="text" ng-model="name" value="World"/>
+    <hr/>
+    Hello {{name}}!
+  </div>
+ </doc:source>
+ <doc:scenario>
+   it('should change the binding when user enters text', function() {
+     expect(binding('name')).toEqual('World');
+     input('name').enter('angular');
+     expect(binding('name')).toEqual('angular');
+   });
+ </doc:scenario>
+</doc:example>
+
+# 알아두어야 할 사항들
+
+소스와 노트를 모두 훑어 보십시오.
+
+* Angular환경을 {@link guide/bootstrap 부트스트랩(bootstraps)}하는 스크립트 태그(script tag)
+* 인사문구에 바인딩되는 {@link api/ng.directive:input input 폼약식 컨트롤(form control)} 문자.
+* 리스너를 등록하거나 변경 이벤트들을 발생할 필요가 없습니다.
+* 루트(root){@link api/ng.$rootScope.Scope scope}에 있는 `name`변수의 내부적 존재.
+* 인사문구에 이름변수를 결속시키는 이중 꺾인 괄호 `{{markup}}`.
+* 인사문구의 input 필드(field)에 어떤 변화든 반응하는 {@link guide/dev_guide.templates.databinding 데이터바인딩(data binding)} 개념.

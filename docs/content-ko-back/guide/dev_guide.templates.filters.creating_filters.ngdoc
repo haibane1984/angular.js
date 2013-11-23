@@ -1,0 +1,58 @@
+@ngdoc overview
+@name Developer Guide: 템플릿: 필터: Angular에서 필터 생성하기
+@description
+
+자신만의 필터를 만드는 것은 매우 쉽다: 모듈에 (주입 가능한) 팩토리 함수로 새로운 필터를 등록하기만
+하면 된다. 이 팩토리 함수는 첫번째 인자로 입력값을 받는 새로운 필터 함수를 반환해야만 한다. 필터의
+모든 인자는 필터 함수에 인자를 추가하여 전달된다.
+
+다음 예제의 필터는 문자열의 순서를 뒤집는다. 또한, 조건부로 문자열을 대문자로 변환한다.
+
+<doc:example module="MyReverseModule">
+<doc:source>
+<script>
+  angular.module('MyReverseModule', []).
+    filter('reverse', function() {
+      return function(input, uppercase) {
+        var out = "";
+        for (var i = 0; i < input.length; i++) {
+          out = input.charAt(i) + out;
+        }
+        // conditional based on optional argument
+        if (uppercase) {
+          out = out.toUpperCase();
+        }
+        return out;
+      }
+    });
+
+  function Ctrl($scope) {
+    $scope.greeting = 'hello';
+  }
+</script>
+
+<div ng-controller="Ctrl">
+  <input ng-model="greeting" type="greeting"><br>
+  No filter: {{greeting}}<br>
+  Reverse: {{greeting|reverse}}<br>
+  Reverse + uppercase: {{greeting|reverse:true}}<br>
+</div>
+</doc:source>
+<doc:scenario>
+  it('should reverse greeting', function() {
+    expect(binding('greeting|reverse')).toEqual('olleh');
+    input('greeting').enter('ABC');
+    expect(binding('greeting|reverse')).toEqual('CBA');
+  });
+</doc:scenario>
+</doc:example>
+
+
+## 관련 토픽
+
+* {@link dev_guide.templates.filters Angular의 필터 이해하기}
+* {@link compiler Angular의 HTML 컴파일러}
+
+## 관련 API
+
+* {@link api/ng.$filter Angular의 필터 API}

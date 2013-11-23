@@ -1,0 +1,280 @@
+@ngdoc overview
+@name Developer Guide: Angular의 MVC: 컨트롤러 컴포넌트 이해하기
+@description
+
+Angular에서 컨트롤러는 루프 스코프를 제외한 Angular 스코프의 인스턴스를 확장하기 위해 사용되는 
+자바스크립트 함수(타입/클래스)이다. 직접 또는 Angular가 {@link api/ng.$rootScope.Scope#$new scope.$new} API를 통해
+새로운 하위 스코프 객체를 생성할 때 컨트롤러에 메소드 인자로 전달하는 옵션이 하나 있다. 
+이것은 Angular에게 컨트롤러를 새로운 스코프에 연결하고 그것의 행위(behavior)를 확장하라고 알려준다.
+
+다음과 같은 경우에 컨트롤러를 사용한다:
+
+- 스코프 객체의 초기 상태를 설정하기 위해
+- 스코프 객체에 행위를 추가하기 위해
+
+# 스코프 객체의 초기 상태 설정
+
+보통 어플리케이션을 만들때는 Angular 스코프에 대한 초기 상태를 설정해야 한다.
+
+Angular는 새로운 초기 스코프 상태가 준비된 새로운 Angular 스코프 객체에 컨트롤러 생성자 함수를
+apply(자바스크립트의 `Function#apply`라는 의미) 한다. 이것은 Angular가 (`new` 연산자로 컨트롤러 생성자를 호출함으로써)
+컨트롤러 타입의 인스턴스를 생성하지는 않는다는 의미이다. 생성자는 항상 기존의 스코프 객체에서 apply 된다.
+
+모델 프로퍼티를 생성함으로써 스코프의 초기 상태를 설정한다. 예를 들면:
+
+<pre>
+function GreetingCtrl($scope) {
+ $scope.greeting = 'Hola!';
+}
+</pre>
+
+`GreetingCtrl` 컨트롤러는 템플릿에서 참조할 수 있는 `greeting` 모델을 생성한다.
+
+**중요**: 문서상의 많은 예제들을 보면 전역 스코프 상에 함수를 생성하고 있다. 이것은 데모를 보여주기 위함일 뿐이며
+실제 어플리케이션에서는 다음의 예제처럼 어플리케이션에 대한 Angular 모듈의 `.controller` 메소드를
+사용해야 한다.
+
+<pre>
+var myApp = angular.module('myApp',[]);
+
+myApp.controller('GreetingCtrl', ['$scope', function(scope) {
+  scope.greeting = 'Hola!';
+}]);
+</pre>
+
+또한 Angular가 제공하는 `$scope` 서비스가 컨트롤러에 종속적임을 명시적으로 지정하기 위해
+배열 구문을 사용하는 것을 주목해라.
+
+# 스코프 객체에 행위 추가하기
+
+Angular 스코프 객체의 행위는 템플릿/뷰에서 사용하도록 스코프의 메소드 프로퍼티 형태로 되어 있다. 
+이러한 행위는 어플리케이션의 모델과 상호작용하여 그것을 수정한다.
+
+이 가이드의 {@link dev_guide.mvc.understanding_model 모델} 섹션에서 설명하고 있는 바와 같이
+그 스코프에 할당된 모든 객체(또는 원시데이터)는 모델 프로퍼티가 된다. 그 스코프에 할당된
+모든 함수는 템플릿/뷰에서 사용 가능하고 Angular 표현식과 `ng` 이벤트 핸들러 지시지를 통해
+호출할 수 있다. (예. {@link api/ng.directive:ngClick ngClick})
+
+# 컨트롤러 올바르게 사용하기
+
+일반적으로 컨트롤러는 너무 많은 작업을 수행해서는 안된다. 하나의 뷰에 대해 필요한 비지니스 로직만을
+포함해야 한다.
+
+컨트롤러를 가볍게 유지하는 가장 일반적인 방법은 컨트롤러에 속하지 않은 작업을 서비스 안으로 캡슐화하고
+의존성 주입을 통해 컨트롤러에서 이 서비스를 사용하는 것이다. 이것은 이 가이드의 {@link di 의존성 주입} 
+{@link dev_guide.services 서비스} 섹션에서 설명하고 있다.
+
+컨트롤러를 사용하지 말아야 할 경우:
+
+- 모든 종류의 DOM 조작 — 컨트롤러는 비지니스 로직만을 포함해야 한다. DOM 조작—어플리케이션의 프리젠테이션 로직—은
+알다시피 테스트하기가 어렵다. 컨트롤러 안에 프리젠테이션 로직을 넣는 것은 비지니스 로직의 테스트 용이성에
+크게 영향을 끼친다. Angular는 자동으로 DOM을 조작하기 위해 {@link dev_guide.templates.databinding 데이터바인딩}을
+제공한다. 만약 수동으로 DOM 조작을 해야만 한다면 {@link guide/directive 지시자}에 프리젠테이션 로직을 캡슐화해라.
+- 입력 서식 — 대신에 {@link forms Angular 폼 컨트롤}을 사용해라.
+- 출력 필터링 — 대신에 {@link dev_guide.templates.filters Angular 필터}를 사용해라.
+- 컨트롤러 간에 공유하고 있는 상태 코드를 운영하는 것 — 대신에 {@link dev_guide.services Angular 서비스}를 사용해라.
+- 다른 컴포넌트를 인스턴스화하거나 생명주기를 관리하는 것 (예를 들어 서비스 인스턴스를 생성하는 것)
+
+
+# 컨트롤러를 Angular 스코프 객체와 연결하기
+
+컨트롤러를 스코프 객체에 {@link api/ng.$rootScope.Scope#$new scope.$new} api를 통해 명시적으로 연결할 수도 있고
+암시적으로 {@link api/ng.directive:ngController ngController 지시자}나 {@link api/ng.$route $route 서비스}를 통해
+연결할 수도 있다.
+
+
+## 컨트롤러 생성자와 메소드 예제
+
+Angular에서 컨트롤러 컴포넌트가 어떻게 작동을 하는지 설명하기 위해 다음의 컴포넌트를 사용하여
+작은 앱을 만들어 보자.
+
+- 두개의 버튼과 간단한 메시지가 있는 {@link dev_guide.templates 템플릿}
+- `spice`라는 이름의 문자열을 포함하고 있는 모델
+- `spice`의 값을 설정하는 두개의 함수 컨트롤러
+
+`spice` 모델에 바인딩되는 템플릿 메시지의 기본값을 문자열 "very"로 설정한다. 버튼을 클릭하는 것에 따라
+`spice` 모델은 `chili` 또는 `jalapeño`로 설정되고 메시지는 데이터 바인딩에 의해 자동으로 업데이트된다.
+
+
+## 흥미로운 컨트롤러 예제
+
+<pre>
+<body ng-controller="SpicyCtrl">
+ <button ng-click="chiliSpicy()">Chili</button>
+ <button ng-click="jalapenoSpicy()">Jalapeño</button>
+ <p>The food is {{spice}} spicy!</p>
+</body>
+
+function SpicyCtrl($scope) {
+ $scope.spice = 'very';
+ $scope.chiliSpicy = function() {
+   $scope.spice = 'chili';
+ }
+ $scope.jalapenoSpicy = function() {
+  $scope.spice = 'jalapeño';
+ }
+}
+
+
+</pre>
+
+위 예제에서 주목할 점은 다음과 같다:
+
+- `ngController` 지시자는 해당 템플릿에 대한 스코프를 (암시적으로) 생성하고 그 스코프는
+`SpicyCtrl` 컨트롤러에 의해 확장(관리)된다.
+- `SpicyCtrl`은 평범한 자바스크립트 함수일뿐이다. (선택적인) 명명 규칙에 따라 이름은 대문자로 시작하고
+"Ctrl" 또는 "Controller"로 끝난다.
+- `$scope`에 프로퍼티를 할당하여 모델을 생성하거나 업데이트한다.
+- 컨트롤러 메소드는 스코프에 직접 할당함으로써 생성할 수 있다.(`chiliSpicy` 메소드)
+- 두개의 컨트롤러 메소드 모두 템플릿에서 사용 가능하다.(`body` 요소와 그 하위 요소에서) 
+- 주의: Angular의 이전 버전(1.0 RC 이전)은 $scope 메소드 대신에 `this`를 사용할 수 있다. 하지만 더이상은
+그렇지 않다. 스코프에 정의된 메소드 안에서는 `this`와 $scope를 바꾸어 사용 가능하다(Angular가 $scope를
+`this`로 설정한다.) 하지만 컨트롤러 생성자 안에서는 그렇지 않다.
+- 주의: Angular의 이전 버전(1.0 RC 이전)에서는 자동으로 스코프에 프로토타입 메소드를 추가했다.
+하지만 더이상은 그렇지 않다; 필요한 모든 메소드는 스코프에 수동으로 추가해야만 한다.
+
+
+이전 예제를 수정한 다음의 예제에서 보듯이 컨트롤러 메소드는 인자를 받을수도 있다.
+
+## 컨트롤러 메소드의 인자 예제
+
+<pre>
+<body ng-controller="SpicyCtrl">
+ <input ng-model="customSpice" value="wasabi">
+ <button ng-click="spicy('chili')">Chili</button>
+ <button ng-click="spicy(customSpice)">Custom spice</button>
+ <p>The food is {{spice}} spicy!</p>
+</body>
+
+function SpicyCtrl($scope) {
+ $scope.spice = 'very';
+ $scope.spicy = function(spice) {
+   $scope.spice = spice;
+ }
+}
+</pre>
+
+이제 `SpicyCtrl` 컨트롤러가 `spice`라는 하나의 인자를 받는 `spicy` 메소드 하나만을 정의하고 있다는 것을
+주목하자. 템플릿은 이 컨트롤러 메소드를 참조하며 첫번째 버튼에 바인딩되어 있는 문자열 상수
+`'chili'`를 전달하고 두번째 버튼에 (입력 박스에 바인딩된) 모델 프로퍼티인 `spice` 를 전달한다.
+
+
+## 컨트롤러 상속 예제
+
+Angular에서 컨트롤러의 상속은 {@link api/ng.$rootScope.Scope 스코프}를 기반으로 한다. 예제를 보자:
+
+<pre>
+<body ng-controller="MainCtrl">
+ <p>Good {{timeOfDay}}, {{name}}!</p>
+ <div ng-controller="ChildCtrl">
+  <p>Good {{timeOfDay}}, {{name}}!</p>
+  <p ng-controller="BabyCtrl">Good {{timeOfDay}}, {{name}}!</p>
+ </div>
+</body>
+
+function MainCtrl($scope) {
+ $scope.timeOfDay = 'morning';
+ $scope.name = 'Nikki';
+}
+
+function ChildCtrl($scope) {
+ $scope.name = 'Mattie';
+}
+
+function BabyCtrl($scope) {
+ $scope.timeOfDay = 'evening';
+ $scope.name = 'Gingerbreak Baby';
+}
+</pre>
+
+템플릿에 세개의 `ngController` 지시자를 중첩시킨 방법을 주목하자. 이러한 템플릿 구조는 아래와 같은
+4개의 스코프를 생성할 것이다.
+
+- 루트 스코프
+- `timeOfDay` 와 `name` 모델을 포함하고 있는 `MainCtrl` 스코프
+- 이전 스코프의 `name` 모델을 덮어쓰고 `timeOfDay` 모델을 상속하고 있는 `ChildCtrl` 스코프
+- `MainCtrl`에서 정의한 `timeOfDay` 모델과 `ChildCtrl`에서 정의한 `name` 모델 둘 다 덮어쓴
+`BabyCtrl` 스코프
+
+컨트롤러간의 상속은 모델과 같은 방식으로 작동한다. 그래서 이전 예제의 모든 모델을 문자열 값을 반환하는
+컨트롤러 메소드로 교체할 수 있다.
+
+중요: 두 컨트롤러 사이의 표준 프로토타입 상속은 우리가 예상하는대로 되지 않는다. 앞에서 언급한 바와 같이
+컨트롤러는 Angular에 의해 직접 인스턴스화되지 않고 스코프 객체에 apply 되기 때문이다.
+
+
+## 컨트롤러 테스트하기
+
+컨트롤러를 테스트하는 많은 방법이 있지만 가장 좋은 방법 중 하나는 아래에서 보는 것과 같이
+`$rootScope`와 `$controller`의 주입을 포함시키는 것이다.
+
+컨트롤러 함수:
+<pre>
+function myController($scope) {
+   $scope.spices = [{"name":"pasilla", "spiciness":"mild"},
+                  {"name":"jalapeno", "spiceiness":"hot hot hot!"},
+                  {"name":"habanero", "spiceness":"LAVA HOT!!"}];
+
+   $scope.spice = "habanero";
+}
+</pre>
+
+컨트롤러 테스트:
+<pre>
+describe('myController function', function() {
+
+  describe('myController', function() {
+    var scope;
+
+    beforeEach(inject(function($rootScope, $controller) {
+      scope = $rootScope.$new();
+      var ctrl = $controller(myController, {$scope: scope});
+    }));
+
+    it('should create "spices" model with 3 spices', function() {
+      expect(scope.spices.length).toBe(3);
+    });
+
+    it('should set the default value of spice', function() {
+      expect(scope.spice).toBe('habanero');
+    });
+  });
+});
+</pre>
+
+
+만약 중첩된 컨트롤러를 테스트해야만 한다면 DOM에 존재하는 테스트에서 같은 스코프 계층 구조를
+생성해야 한다.
+
+<pre>
+describe('state', function() {
+    var mainScope, childScope, babyScope;
+
+    beforeEach(inject(function($rootScope, $controller) {
+        mainScope = $rootScope.$new();
+        var mainCtrl = $controller(MainCtrl, {$scope: mainScope});
+        childScope = mainScope.$new();
+        var childCtrl = $controller(ChildCtrl, {$scope: childScope});
+        babyScope = childCtrl.$new();
+        var babyCtrl = $controller(BabyCtrl, {$scope: babyScope});
+    }));
+
+    it('should have over and selected', function() {
+        expect(mainScope.timeOfDay).toBe('morning');
+        expect(mainScope.name).toBe('Nikki');
+        expect(childScope.timeOfDay).toBe('morning');
+        expect(childScope.name).toBe('Mattie');
+        expect(babyScope.timeOfDay).toBe('evening');
+        expect(babyScope.name).toBe('Gingerbreak Baby');
+    });
+});
+</pre>
+
+
+## 관련 토픽
+
+* {@link dev_guide.mvc Angular의 MVC}
+* {@link dev_guide.mvc.understanding_model 모델 컴포넌트 이해하기}
+* {@link dev_guide.mvc.understanding_view 뷰 컴포넌트 이해하기}
+
+
