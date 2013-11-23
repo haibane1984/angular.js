@@ -542,9 +542,10 @@ Doc.prototype = {
     }
   },
 
-  html: function() {
+  html: function(gn) {
     var dom = new DOM(),
       self = this,
+      groupName = (gn) ? gn : 'angular',
       minerrMsg;
 
     var gitTagFromFullVersion = function(version) {
@@ -561,7 +562,7 @@ Doc.prototype = {
 
     if (this.section === 'api') {
       dom.tag('a', {
-          href: 'http://github.com/angular/angular.js/tree/' +
+          href: 'http://github.com/'+groupName+'/angular.js/tree/' +
             gitTagFromFullVersion(gruntUtil.getVersion().full) + '/' + self.file + '#L' + self.line,
           class: 'view-source btn btn-action' }, function(dom) {
         dom.tag('i', {class:'icon-zoom-in'}, ' ');
@@ -569,7 +570,7 @@ Doc.prototype = {
       });
     }
     dom.tag('a', {
-        href: 'http://github.com/angular/angular.js/edit/master/' + self.file,
+        href: 'http://github.com/'+groupName+'/angular.js/edit/master/' + self.file,
         class: 'improve-docs btn btn-primary' }, function(dom) {
       dom.tag('i', {class:'icon-edit'}, ' ');
       dom.text(' Improve this doc');
